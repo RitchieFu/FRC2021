@@ -40,7 +40,7 @@ import frc.robot.subsystems.*;
  * project.
  */
 
- //To deploy this, run (gradlew deploy -x test) in the command prompt
+ //To deploy this, run (gradlew deploy -x test) in the command prompt Hi- Mark
 public class Robot extends TimedRobot {
   public static OI oi;
   private static final double UPDATE_DT = 5e-3; // 5 ms
