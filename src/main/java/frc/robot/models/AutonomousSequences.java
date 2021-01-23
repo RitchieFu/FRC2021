@@ -2,6 +2,7 @@ package frc.robot.models;
 
 import org.frcteam2910.common.control.ITrajectoryConstraint;
 import org.frcteam2910.common.control.Path;
+import org.frcteam2910.common.control.PathArcSegment;
 import org.frcteam2910.common.control.PathLineSegment;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
@@ -24,7 +25,38 @@ import frc.robot.commands.VisionRotationDriveCommand;
 
 public class AutonomousSequences {
 
+        public static CommandGroup RotateTest(){
+                CommandGroup output = new CommandGroup();
 
+                // RobotRotateCommand rotateCommand = new RobotRotateCommand(90);
+                // output.addSequential(rotateCommand);
+                // Path driveToTrenchPath = new Path(Rotation2.ZERO);
+                // driveToTrenchPath.addSegment(
+                //         new PathLineSegment(
+                //                 new Vector2(0.0, 0.0),
+                //                 new Vector2(0.0, 0.0)
+                //         ),
+                //         Rotation2.fromDegrees(-90)
+                //         // negative angle = clockwise when viewed from Frank's safe command station
+                //         // positive angle = counterclockwise when viewed from Frank's safe command station       
+                // );
+
+                
+                PathArcSegment fooFi = PathArcSegment.fromPoints(new Vector2(0.0, 0.0), new Vector2(70.0, -20.0), new Vector2(0, -60.0));
+                Path arcFooFi = new Path(Rotation2.ZERO);
+                arcFooFi.addSegment(fooFi);
+
+                // Trajectory driveToTrenchTrajectory = new Trajectory(driveToTrenchPath, Robot.drivetrainSubsystem.CONSTRAINTS);
+                // AutonomousTrajectoryCommand driveToTrenchCommand = new AutonomousTrajectoryCommand(driveToTrenchTrajectory);
+
+                Trajectory fooFiTrajectory = new Trajectory(arcFooFi, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand fooFiCommand = new AutonomousTrajectoryCommand(fooFiTrajectory);
+
+                
+                output.addSequential(fooFiCommand);
+        
+                return output;
+        }
 
 	public static CommandGroup ShootThenCollectRight(){
                 CommandGroup output = new CommandGroup();

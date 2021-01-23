@@ -229,6 +229,7 @@ private void initChooser() {
  m_chooser.addOption("Shoot from Right, Collect Right, Shoot Again", AutonomousSequences.ShootFromRight_Of_Optimal_Then_Collect());
  m_chooser.addOption("Shoot Then Leave Initiation Line", AutonomousSequences.shootThenBackAwayFromInitiationLine());
  m_chooser.addOption("Shoot, Collect Left", AutonomousSequences.ShootThenCollectLeft());
+ m_chooser.addOption("Rotate 90 degrees", AutonomousSequences.RotateTest());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 
