@@ -230,6 +230,9 @@ private void initChooser() {
  m_chooser.addOption("Shoot Then Leave Initiation Line", AutonomousSequences.shootThenBackAwayFromInitiationLine());
  m_chooser.addOption("Shoot, Collect Left", AutonomousSequences.ShootThenCollectLeft());
  m_chooser.addOption("Rotate 90 degrees", AutonomousSequences.RotateTest());
+ m_chooser.addOption("Galactic-Seearch Red A", AutonomousSequences.GalacticSearchRedPathA());
+ m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
+ m_chooser.addOption("DriveStraight", AutonomousSequences.DriveStraight());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 
@@ -347,6 +350,7 @@ private void initChooser() {
     //Vector2 vec = drivetrainSubsystem.getKinematicPosition();
     //SmartDashboard.putNumber("Current Pose X", vec.x);
     //SmartDashboard.putNumber("Current Pose Y", vec.y);
+    
    
 
     //drivetrainSubsystem.outputToSmartDashboard();

@@ -37,7 +37,8 @@ public class AutonomousTrajectoryCommand extends Command {
 	
     // Called just before this Command runs the first time
     protected void initialize() {
-        //Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle());
+        //FHE: Enable the following line to for drive/rotate/drive test
+        Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle());
     
 
 
@@ -60,12 +61,12 @@ public class AutonomousTrajectoryCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
-        double pathDuration = autonomousTrajectory.getDuration();
-        double lastTimeStamp =  Robot.drivetrainSubsystem.lastTimestamp;
+       // double pathDuration = autonomousTrajectory.getDuration();
+        //double lastTimeStamp =  Robot.drivetrainSubsystem.lastTimestamp;
 
-        double rotationAngle = 90;
+        //double rotationAngle = 90;
 
-        double currentAngle = rotationAngle * (lastTimeStamp/pathDuration);
+        //double currentAngle = rotationAngle * (lastTimeStamp/pathDuration);
 
         // System.out.println("currentAngle: " + currentAngle);
 

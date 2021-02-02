@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Robot;
-
 import org.frcteam2910.common.math.Vector2;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -17,7 +16,7 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 
 public class RobotRotateCommand extends Command {
   PIDController angleController;
-  double angle;
+  double targetAngle;
   double currentAngle;
 
   //NOTE: This command rotates to an absolute angle based on the orientation the robot started in. Will work in Auto, must be adapted for Teleop
@@ -27,28 +26,51 @@ public class RobotRotateCommand extends Command {
     super(2);
     angleController = new PIDController(0.005, 0.001, 0.0);
     angleController.enableContinuousInput(-180, 180);
-    this.angle = angle;
+    this.targetAngle = angle;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    angleController.setSetpoint(angle);
+    //Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Rotation2.fromDegrees(offset + drivetrain.getGyroscope().getUnadjustedAngle().toDegrees()));
+    Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle());
+
+    System.out.println("Rotation initialized.");
+    //Vector2 position = new Vector2(0, 0);
+    //Robot.drivetrainSubsystem.resetKinematics(position, 0);
+    angleController.setSetpoint(targetAngle);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     currentAngle = Robot.drivetrainSubsystem.getGyroscope().getAngle().toDegrees();
+    //boolean fieldOriented = false;
+    //Robot.drivetrainSubsystem.holonomicDrive(Vector2.ZERO, angleController.calculate(currentAngle), fieldOriented);
     Robot.drivetrainSubsystem.holonomicDrive(Vector2.ZERO, angleController.calculate(currentAngle));
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if(currentAngle > angle - 2 && currentAngle < angle + 2 ) {
+     if (super.isTimedOut())
+     {
+      System.out.println("Rotation timed out");
+       return true;
+
+     }
+     double absoluteCurrentAngle = Math.abs(currentAngle);
+     double absoluteTargetAngle = Math.abs(targetAngle);
+
+     double angleDelta = Math.abs(absoluteCurrentAngle - absoluteTargetAngle);
+    //if(currentAngle > targetAngle - 2 && currentAngle < targetAngle + 2 ) 
+    if (angleDelta < 2)
+    {
+      System.out.println("Rotation finished");
       return true;
-    } else {
+    } 
+    else 
+    {
       return false;
     }
   }

@@ -25,9 +25,91 @@ import frc.robot.commands.VisionRotationDriveCommand;
 
 public class AutonomousSequences {
 
+        public static CommandGroup DriveStraight() {
+                CommandGroup output = new CommandGroup();
+
+                Path driveForward = new Path(Rotation2.ZERO);
+                driveForward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-114, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+                output.addSequential(driveForwardCommand);
+
+                return output;
+        }
+
+
         public static CommandGroup RotateTest(){
                 CommandGroup output = new CommandGroup();
 
+                RobotRotateCommand rotateCommand = new RobotRotateCommand(90);
+                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(90);
+                RobotRotateCommand rotateCommand3 = new RobotRotateCommand(90);
+                RobotRotateCommand rotateCommand4 = new RobotRotateCommand(90);
+
+                Path driveForward1 = new Path(Rotation2.ZERO);
+                driveForward1.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-30, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory1 = new Trajectory(driveForward1, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand1 = new AutonomousTrajectoryCommand(driveForwardTrajectory1);
+
+                Path driveForward2 = new Path(Rotation2.ZERO);
+                driveForward2.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-30, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory2 = new Trajectory(driveForward2, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand2 = new AutonomousTrajectoryCommand(driveForwardTrajectory2);
+
+                Path driveForward3 = new Path(Rotation2.ZERO);
+                driveForward3.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-30, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory3 = new Trajectory(driveForward3, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand3 = new AutonomousTrajectoryCommand(driveForwardTrajectory3);
+
+                Path driveForward4 = new Path(Rotation2.ZERO);
+                driveForward4.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-30, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory4 = new Trajectory(driveForward4, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand4 = new AutonomousTrajectoryCommand(driveForwardTrajectory4);
+
+
+
+                output.addSequential(rotateCommand, 2);
+                //output.addSequential(driveForwardCommand1);
+                output.addSequential(rotateCommand2, 2);
+                //output.addSequential(driveForwardCommand4);
+                output.addSequential(rotateCommand3, 2);
+                //output.addSequential(driveForwardCommand4);
+                output.addSequential(rotateCommand4, 2);
+                //output.addSequential(driveForwardCommand4);
+                return output;
+                //-----------------------------------------------------------
+                
                 // RobotRotateCommand rotateCommand = new RobotRotateCommand(90);
                 // output.addSequential(rotateCommand);
                 // Path driveToTrenchPath = new Path(Rotation2.ZERO);
@@ -42,20 +124,108 @@ public class AutonomousSequences {
                 // );
 
                 
-                PathArcSegment fooFi = PathArcSegment.fromPoints(new Vector2(0.0, 0.0), new Vector2(70.0, -20.0), new Vector2(0, -60.0));
-                Path arcFooFi = new Path(Rotation2.ZERO);
-                arcFooFi.addSegment(fooFi);
+                // PathArcSegment fooFi = PathArcSegment.fromPoints(new Vector2(0.0, 0.0), new Vector2(70.0, -20.0), new Vector2(0, -60.0));
+                // Path arcFooFi = new Path(Rotation2.ZERO);
+                // arcFooFi.addSegment(fooFi);
 
-                // Trajectory driveToTrenchTrajectory = new Trajectory(driveToTrenchPath, Robot.drivetrainSubsystem.CONSTRAINTS);
-                // AutonomousTrajectoryCommand driveToTrenchCommand = new AutonomousTrajectoryCommand(driveToTrenchTrajectory);
+                // // Trajectory driveToTrenchTrajectory = new Trajectory(driveToTrenchPath, Robot.drivetrainSubsystem.CONSTRAINTS);
+                // // AutonomousTrajectoryCommand driveToTrenchCommand = new AutonomousTrajectoryCommand(driveToTrenchTrajectory);
 
-                Trajectory fooFiTrajectory = new Trajectory(arcFooFi, Robot.drivetrainSubsystem.CONSTRAINTS);
-                AutonomousTrajectoryCommand fooFiCommand = new AutonomousTrajectoryCommand(fooFiTrajectory);
+                // Trajectory fooFiTrajectory = new Trajectory(arcFooFi, Robot.drivetrainSubsystem.CONSTRAINTS);
+                // AutonomousTrajectoryCommand fooFiCommand = new AutonomousTrajectoryCommand(fooFiTrajectory);
 
                 
-                output.addSequential(fooFiCommand);
+                // output.addSequential(fooFiCommand);
         
+                //return output;
+        }
+
+        public static CommandGroup DriveTwoFeetTwice() {
+                CommandGroup output = new CommandGroup();
+                RobotRotateCommand rotateCommand = new RobotRotateCommand(-90);
+                Path driveForward = new Path(Rotation2.ZERO);
+                driveForward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-48, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand1 = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+                Path driveForward2 = new Path(Rotation2.ZERO);
+                driveForward2.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-48, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory2 = new Trajectory(driveForward2, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand2 = new AutonomousTrajectoryCommand(driveForwardTrajectory2);
+
+                output.addSequential(driveForwardCommand1);
+                output.addSequential(rotateCommand, 2);
+                output.addSequential(driveForwardCommand2);
+
                 return output;
+        }
+
+        public static CommandGroup GalacticSearchRedPathA() {
+                CommandGroup output = new CommandGroup();
+                //RobotRotateCommand rotateCommand = new RobotRotateCommand(-26.56);
+                RobotRotateCommand rotateCommand = new RobotRotateCommand(-29.56); //FHE
+                //RobotRotateCommand rotateCommand2 = new RobotRotateCommand(98.12);
+                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(96.12); //FHE
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
+
+                Path driveForward = new Path(Rotation2.ZERO);
+                driveForward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-29.0, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+                
+                Path driveToD5 = new Path(Rotation2.ZERO);
+                driveToD5.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-78, 0.0)
+                        )
+                );
+                
+                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToD5Command = new AutonomousTrajectoryCommand(driveToD5Trajectory);
+
+
+                Path driveToA6 = new Path(Rotation2.ZERO);
+                driveToA6.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-105, 0.0)
+                        )
+                );
+                
+                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToA6Command = new AutonomousTrajectoryCommand(driveToA6Trajectory);
+
+                output.addParallel(lowerIntake);
+                output.addParallel(driveForwardCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(3));
+                output.addSequential(rotateCommand, 2);
+                output.addParallel(driveToD5Command);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
+                output.addSequential(rotateCommand2, 2);
+                output.addParallel(driveToA6Command);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(8));
+
+                return output; 
         }
 
 	public static CommandGroup ShootThenCollectRight(){
