@@ -109,7 +109,8 @@ private static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians
 private static final double BACK_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-138.8); //-148 + 180   -326.8
 //private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-173.1); //14
 //private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-131.5); //14
-private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-12.5); //14
+//private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-12.5); //14
+private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(48.5 + 45); //14
 private static final double FRONT_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-24.5); //-336+180    -151.6
 
   private static final PidConstants FOLLOWER_TRANSLATION_CONSTANTS = new PidConstants(0.05, 0.01, 0.0);

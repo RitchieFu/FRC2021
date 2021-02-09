@@ -25,6 +25,37 @@ import frc.robot.commands.VisionRotationDriveCommand;
 
 public class AutonomousSequences {
 
+
+        public static CommandGroup DriveLeftThenRight() {
+                CommandGroup output = new CommandGroup();
+                Path driveLeft = new Path(Rotation2.ZERO);
+                driveLeft.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2( 0.0, -40)
+                        )
+                );
+                
+                Trajectory driveLeftTrajectory = new Trajectory(driveLeft, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveLeftCommand = new AutonomousTrajectoryCommand(driveLeftTrajectory);
+
+                Path driveRight = new Path(Rotation2.ZERO);
+                driveRight.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2( 0.0, 40)
+                        )
+                );
+                
+                Trajectory driveRightTrajectory = new Trajectory(driveRight, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveRightCommand = new AutonomousTrajectoryCommand(driveRightTrajectory);
+
+
+                output.addSequential(driveLeftCommand);
+                output.addSequential(driveRightCommand);
+                return output;
+        }
+
         public static CommandGroup DriveStraightForwardAndBack() {
                 CommandGroup output = new CommandGroup();
 

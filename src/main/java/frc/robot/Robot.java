@@ -204,6 +204,7 @@ private void initChooser() {
  m_chooser.addOption("Galactic-Seearch Red A", AutonomousSequences.GalacticSearchRedPathA());
  m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
  m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
+ m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
