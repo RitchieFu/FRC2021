@@ -16,4 +16,6 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final int ROBOT_LENGTH = 37; //in inches, from back to front edge of the bumper
+    public static final double ROBOT_WIDTH = 32.75; //in inches, from right to left edge of the bumper
 }

@@ -54,8 +54,7 @@ public class Robot extends TimedRobot {
   public static ElevatorSubsystem elevatorSubsystem;
   public static IntakeSubsystem intakeSubsystem;
   public static ShooterSubsystem shooterSubsystem;
-  public static ClimberSubsystem climberSubsystem;
-  public static ColorSpinnerSubsystem colorSpinnerSubsystem;
+
 
   SendableChooser<CommandGroup> m_chooser;
 
@@ -64,8 +63,6 @@ public class Robot extends TimedRobot {
   public HolonomicDriveCommand driveCommand;
   ZeroFieldOrientedCommand zeroCommand;
   ZeroFieldOrientedCommand reverseZeroCommand;
-
-  public ColorSpinCommand colorSpinCommand;
 
   ElevatorCommand elevatorUpCommand;
   ElevatorCommand elevatorDownCommand;
@@ -97,13 +94,8 @@ public class Robot extends TimedRobot {
   VisionLightCommand visionLightCommand;
   VisionRotationDriveCommand visionRotationDriveCommand;
   RobotRotateCommand robotRotateCommand;
-  ExtendClimberCommand extendClimberCommand;
-  ClimbCommand climbCommand;
-  ColorCommand colorCommand;
 
-  CommandGroup controlPanelRotationSequence;
-  LimitSwitchCommand limitSwitchCommand;
-  RotateControlPanelCommand rotateControlPanelCommand;
+
 
   boolean autoHappened;
 
@@ -135,8 +127,6 @@ private void initSubsystems() {
   shooterSubsystem = new ShooterSubsystem();
   subsystemManager = new SubsystemManager(drivetrainSubsystem);
   intakeSubsystem = new IntakeSubsystem();
-  colorSpinnerSubsystem = new ColorSpinnerSubsystem();
-  climberSubsystem = new ClimberSubsystem();
 }
 
 private void initCommands() {
@@ -155,8 +145,6 @@ private void initCommands() {
     elevatorIndexUpCommand = new ElevatorIndexCommand(true, 70);
     elevatorIndexDownCommand = new ElevatorIndexCommand(false, 70);
 
-    colorCommand = new ColorCommand(colorSpinnerSubsystem);
-    
 
     intakeInCommand = new IntakeCommand(false);
     intakeOutCommand = new IntakeCommand(true);
@@ -173,18 +161,7 @@ private void initCommands() {
     lowerShooterCommand = new ShooterActuateCommand(true, 3);
     shooterToggleCommand = new ShooterToggleCommand();
 
-    colorSpinCommand = new ColorSpinCommand(colorSpinnerSubsystem);
-
-    // intakeCommandGroup = new IntakeCommandGroup();
-
-    climbCommand = new ClimbCommand();
-    extendClimberCommand = new ExtendClimberCommand();
-
-    //controlPanelRotationSequence = AutonomousSequences.PositionForCPMAndRotateFourTimes();
-    limitSwitchCommand = new LimitSwitchCommand(10);
-    rotateControlPanelCommand = new RotateControlPanelCommand(colorSpinnerSubsystem, 10);
-
-}
+ }
 
 private void initButtons() {
     //oi.bedForwardButton.toggleWhenPressed(bedForwardCommand);
@@ -205,19 +182,13 @@ private void initButtons() {
      oi.intakeElevationButton.toggleWhenPressed(intakeToggleCommand);
      
      oi.shooterElevationButton.toggleWhenPressed(shooterToggleCommand);
-     
-
-    oi.climberExtendButton.whenPressed(extendClimberCommand);
-    oi.climbButton.whileHeld(climbCommand);
-
 
     //oi.helloArcButton.whileHeld(robotRotateCommand);
     oi.referenceResetButton.whenPressed(zeroCommand);
     oi.shooterNoVisionButton.whileHeld(shooterNoVisionCommand);
     oi.shooterVisionButton.whileHeld(shooterWithVisionCommand);
-    //oi.colorSpinnerButton.whenPressed(colorCommand);
 
-    oi.controlPanelRotationButton.whileHeld(rotateControlPanelCommand);
+
 }
 
 private void initChooser() {
@@ -232,7 +203,8 @@ private void initChooser() {
  m_chooser.addOption("Rotate 90 degrees", AutonomousSequences.RotateTest());
  m_chooser.addOption("Galactic-Seearch Red A", AutonomousSequences.GalacticSearchRedPathA());
  m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
- m_chooser.addOption("DriveStraight", AutonomousSequences.DriveStraight());
+ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
+ m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 
@@ -336,7 +308,7 @@ private void initChooser() {
 
     subsystemManager.enableKinematicLoop(UPDATE_DT);
     zeroCommand.start();
-    climberSubsystem.extendPistons();
+
   }
 
   /**

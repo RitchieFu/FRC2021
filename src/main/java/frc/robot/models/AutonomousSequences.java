@@ -1,5 +1,7 @@
 package frc.robot.models;
 
+import java.sql.DriverManager;
+
 import org.frcteam2910.common.control.ITrajectoryConstraint;
 import org.frcteam2910.common.control.Path;
 import org.frcteam2910.common.control.PathArcSegment;
@@ -12,34 +14,45 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.AutonomousTrajectoryCommand;
-import frc.robot.commands.AutonomousTrajectoryLimitSwitchCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeActuateCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDetectToElevatorIndexCommand;
 import frc.robot.commands.RobotRotateCommand;
-import frc.robot.commands.RotateControlPanelCommand;
 import frc.robot.commands.ShooterActuateCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.VisionRotationDriveCommand;
 
 public class AutonomousSequences {
 
-        public static CommandGroup DriveStraight() {
+        public static CommandGroup DriveStraightForwardAndBack() {
                 CommandGroup output = new CommandGroup();
 
                 Path driveForward = new Path(Rotation2.ZERO);
                 driveForward.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(-114, 0.0)
+                                new Vector2(-100, 0.0)
                         )
                 );
                 
-                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
-                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+                Trajectory driveforwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveforwardTrajectory);
+
+                Path driveBackward = new Path(Rotation2.ZERO);
+                driveBackward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(100, 0.0)
+                        )
+                );
+                
+                Trajectory drivebackwardTrajectory = new Trajectory(driveBackward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveBackwardCommand = new AutonomousTrajectoryCommand(drivebackwardTrajectory);
+
 
                 output.addSequential(driveForwardCommand);
+                output.addSequential(driveBackwardCommand);
 
                 return output;
         }
@@ -226,6 +239,105 @@ public class AutonomousSequences {
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(8));
 
                 return output; 
+        }
+
+        public static CommandGroup GalacticSearchBluePathA() {
+                CommandGroup output = new CommandGroup();
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
+                RobotRotateCommand rotateCommand0 = new RobotRotateCommand(71.56); 
+                RobotRotateCommand rotateCommand1 = new RobotRotateCommand(-97.12); 
+                
+                Path driveForward = new Path(Rotation2.ZERO);
+                driveForward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-123.0, 0.0)
+                        )
+                );
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+
+                Path driveToB7 = new Path(Rotation2.ZERO);
+                driveToB7.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-94.86, 0.0)
+                        )
+                );
+                
+                Trajectory driveToB7Trajectory = new Trajectory(driveToB7, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToB7Command = new AutonomousTrajectoryCommand(driveToB7Trajectory);
+
+                Path driveToC9 = new Path(Rotation2.ZERO);
+                driveToC9.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-67.08,0.0)
+                        )
+                );
+                
+                Trajectory driveToC9Trajectory = new Trajectory(driveToC9, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToC9Command = new AutonomousTrajectoryCommand(driveToC9Trajectory);
+
+                Path driveToEndzone = new Path(Rotation2.ZERO);
+                driveToEndzone.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-67.08,0.0)
+                        )
+                );
+                
+                Trajectory driveToEndzoneTrajectory = new Trajectory(driveToEndzone, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToEndzoneCommand = new AutonomousTrajectoryCommand(driveToEndzoneTrajectory);
+
+                output.addParallel(lowerIntake);
+                output.addParallel(driveForwardCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(3)); //is 3 seconds enough?
+                output.addSequential(rotateCommand0);
+                output.addParallel(driveToB7Command);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(3)); //is 3 seconds enough?
+                output.addSequential(rotateCommand1);
+                return output; 
+
+                // Why dont we make a function that takes the params for movement and such then returns the AutonomousTrajectoryCommand to make the code smaller, just an idea
+        }
+
+        public CommandGroup buildDriveAndCollect(Vector2 startPose, Vector2 endPose)
+        {
+                CommandGroup driveAndCollect = new CommandGroup();
+
+
+                return driveAndCollect;
+        }
+
+
+        public static CommandGroup IntakeTest(){
+                CommandGroup output = new CommandGroup();
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
+                IntakeActuateCommand raiseIntake = new IntakeActuateCommand(true,1);
+                Path driveForwardPath = new Path(Rotation2.ZERO);
+                driveForwardPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0, 0.0),
+                                new Vector2(-106, 0.0) //FHE:TODO Confirm positive/negative
+                        )
+                );
+
+
+                Trajectory driveForwardTrajectory = new Trajectory(driveForwardPath, Robot.drivetrainSubsystem.INTAKE_CONSTRAINTS);
+
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+           
+                output.addSequential(lowerIntake);
+                output.addParallel(driveForwardCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand());
+                output.addSequential(new IntakeDetectToElevatorIndexCommand());
+                output.addSequential(new IntakeDetectToElevatorIndexCommand());
+                output.addSequential(raiseIntake);
+
+                return output;
         }
 
 	public static CommandGroup ShootThenCollectRight(){
@@ -506,41 +618,7 @@ public class AutonomousSequences {
         }
 
 
-        public static CommandGroup PositionForCPMAndRotateFourTimes(){
-                CommandGroup output = new CommandGroup();
-                Path driveOffWallPath = new Path(Rotation2.ZERO);
-                driveOffWallPath.addSegment(
-                        new PathLineSegment(
-                                new Vector2(0.0, 0.0),
-                                new Vector2(-27.5, 0.0) //FHE:TODO Confirm positive/negative
-                        )
-                );
-
-
-                Trajectory driveOffWallTrajectory = new Trajectory(driveOffWallPath, Robot.drivetrainSubsystem.CONSTRAINTS);
-
-                AutonomousTrajectoryCommand driveOffWallCommand = new AutonomousTrajectoryCommand(driveOffWallTrajectory);
-
-                output.addSequential(driveOffWallCommand);
-
-                Path driveTowardsCPPath = new Path(Rotation2.ZERO);
-                driveTowardsCPPath.addSegment(
-                        new PathLineSegment(
-                                new Vector2(0.0, 0.0),
-                                new Vector2(0, -200) //FHE:TODO Confirm positive/negative
-                        )
-                );
-
-                
-                Trajectory driveTowardsCPTrajectory = new Trajectory(driveTowardsCPPath, Robot.drivetrainSubsystem.CONSTRAINTS);//TODO add slow constrains
-
-                AutonomousTrajectoryLimitSwitchCommand driveTowardsCPCommand = new AutonomousTrajectoryLimitSwitchCommand(driveTowardsCPTrajectory);
-                output.addSequential(driveTowardsCPCommand);
-
-                RotateControlPanelCommand rotateControlPanelCommand = new RotateControlPanelCommand(Robot.colorSpinnerSubsystem, 4);
-                output.addSequential(rotateControlPanelCommand);
-                return output;
-        }
+       
     //Lifts intake
     //Drives forward 5 inches
     //Spins intake

@@ -32,9 +32,14 @@ public class HolonomicMotionProfiledTrajectoryFollower extends TrajectoryFollowe
     protected HolonomicDriveSignal calculateDriveSignal(RigidTransform2 currentPose, Vector2 velocity,
                                                double rotationalVelocity, Trajectory trajectory, double time,
                                                double dt) {
+
+                                               
+
+        //System.out.println("calculateDriveSignal: time: " + time + "\t pose: " + currentPose.toString());
+        //System.out.println("velocity; " + velocity.toString() + "\trotaionalVelocity; " + rotationalVelocity);
         if (time > trajectory.getDuration()) {
             finished = true;
-            return new HolonomicDriveSignal(Vector2.ZERO, 0.0, false);
+            return new HolonomicDriveSignal(Vector2.ZERO, 0.0,false);
         }
 
         pose = currentPose;

@@ -71,11 +71,5 @@ public class OI {
   Button shooterElevationButton = new JoystickButton(leftStick, RobotMap.L_SHOOTER_ELEVATION_BUTTON);
 
 
-  Button climberExtendButton  = new JoystickButton(rightStick, RobotMap.R_CLIMBER_EXTEND_BUTTON);
-  Button climbButton = new JoystickButton(rightStick, RobotMap.R_CLIMB_BUTTON);
-
-
-  //Button colorSpinnerButton = new JoystickButton(leftStick, RobotMap.L_COLOR_SPINNER_BUTTON);
-  Button controlPanelRotationButton = new JoystickButton(leftStick, RobotMap.L_COLOR_SPINNER_BUTTON);
-
+ 
 }
