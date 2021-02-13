@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
+import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -7,78 +10,97 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
+
+class VisionObject {
+	String objectLabel;
+	int x;
+	int y;
+	int z;
+	int confidence;
+
+	// TODO - figure out ~magic~ to pass data from camera/pi to robot
+}
+
+
 /**
  *
  */
 public class ObjectTracker extends Subsystem {
 	NetworkTable monsterVision; 
-     
+    ArrayList<VisionObject> foundObjects; 
+
 	// Put methods for controlling this subsystem
     // here. Call these from Commands.
 	public ObjectTracker(){
         NetworkTableInstance inst = NetworkTableInstance.getDefault(); 
-        monsterVision = inst.getTable("MonsterVison");			   
+        monsterVision = inst.getTable("MonsterVison");	
+        	
+        monsterVision.addEntryListener(
+            "ObjectTracker",
+            (monsterVision, key, entry, value, flags) -> {
+           System.out.println("ObjectTracker changed value: " + value.getValue());
+        }, 
+        EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+                 
 	}
     
-    private NetworkTableEntry getEntry(Integer index, String subkey) {
-        try {
-            NetworkTable table = monsterVision.getSubTable(index.toString());
-            NetworkTableEntry entry = table.getEntry(subkey);
-            return entry;
-        }
-        catch (Exception e){
-            return null;
-        } 
-    }
+    // private NetworkTableEntry getEntry(Integer index, String subkey) {
+    //     try {
+    //         NetworkTable table = monsterVision.getSubTable(index.toString());
+    //         NetworkTableEntry entry = table.getEntry(subkey);
+    //         return entry;
+    //     }
+    //     catch (Exception e){
+    //         return null;
+    //     } 
+    // }
 	
-	public boolean powerCellExists(int index) { //TODO add overload for objectId
-        NetworkTableEntry entry = getEntry(index,"Label");
-        if (entry == null) {
-            return false;
+	public String getLabel(int index) { //TODO add overload for objectId
+        if (foundObjects.size() <= index) {
+            return null; 
         }
-        String label = entry.getString("");
-        return label.equals("powerCell");
+        return foundObjects.get(index).objectLabel;
 	}
 
     public int numberOfObjects() {
-        NetworkTableEntry entry = monsterVision.getEntry("numberOfObjects");
-        if (entry == null) {
-            return 0; 
-        }
-        return (int) entry.getDouble(0); // truncates decimal, AKA rounds down
+        return foundObjects.size(); 
     }
     
-    public Double getX(int index) {
-        NetworkTableEntry entry = getEntry(index,"x");
-        if (entry == null) {
+    public Integer getX(int index) {
+        if (foundObjects.size() <= index) {
             return null; 
         }
-        Double x = entry.getDouble(0);
-        return x;
+        return foundObjects.get(index).x;
     }
     
-    public Double getY(int index) {
-        NetworkTableEntry entry = getEntry(index,"y");
-        if (entry == null) {
-            return null; 
+    public Integer getY(int index) {
+        if (foundObjects.size() <= index) {
+            return null;
         }
-        Double y = entry.getDouble(0);
-        return y;
+        return foundObjects.get(index).y;
     }
 
-    public Double getZ(int index) {
-        NetworkTableEntry entry = getEntry(index,"z");
-        if (entry == null) {
-            return null; 
+    public Integer getZ(int index) {
+        if (foundObjects.size() <= index) {
+            return null;
         }
-        Double z = entry.getDouble(0);
-        return z; 
+        return foundObjects.get(index).z;
+    }
+
+    public Integer getConfidence(int index) {
+        if (foundObjects.size() <= index) {
+            return null;
+        }
+        return foundObjects.get(index).confidence;
     }
 
 
 	public Double getXAngle(int index) {
-        double x = getX(index);
-        double z = getZ(index);
+        Integer x = getX(index);
+        Integer z = getZ(index);
+        if (x == null || z == null) {
+            return null; 
+        }
         double angle = Math.atan2(x, z);
         return angle;
 	}
