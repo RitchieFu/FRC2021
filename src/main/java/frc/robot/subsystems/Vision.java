@@ -11,7 +11,7 @@ import frc.robot.RobotMap;
  *
  */
 public class Vision extends Subsystem {
-
+	
 	
 	NetworkTableEntry tx;
 	NetworkTableEntry ty;

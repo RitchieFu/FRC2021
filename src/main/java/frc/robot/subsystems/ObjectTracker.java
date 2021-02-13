@@ -35,15 +35,19 @@ public class ObjectTracker extends Subsystem {
         NetworkTableInstance inst = NetworkTableInstance.getDefault(); 
         monsterVision = inst.getTable("MonsterVison");	
         	
-        monsterVision.addEntryListener(
-            "ObjectTracker",
-            (monsterVision, key, entry, value, flags) -> {
-           System.out.println("ObjectTracker changed value: " + value.getValue());
-        }, 
-        EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        // monsterVision.addEntryListener(
+        //     "ObjectTracker",
+        //     (monsterVision, key, entry, value, flags) -> {
+        //    System.out.println("ObjectTracker changed value: " + value.getValue());
+        // }, 
+        // EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
                  
 	}
     
+    public void data() {
+        //TODO read network table and populate found objects
+    }
     // private NetworkTableEntry getEntry(Integer index, String subkey) {
     //     try {
     //         NetworkTable table = monsterVision.getSubTable(index.toString());
@@ -55,7 +59,7 @@ public class ObjectTracker extends Subsystem {
     //     } 
     // }
 	
-	public String getLabel(int index) { //TODO add overload for objectId
+	public String getLabel(int index) {
         if (foundObjects.size() <= index) {
             return null; 
         }

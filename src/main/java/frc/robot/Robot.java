@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
   public static DrivetrainSubsystem drivetrainSubsystem;
 
   public static Vision vision;
+  public static ObjectTracker objectTracker;
 
   public static ElevatorSubsystem elevatorSubsystem;
   public static IntakeSubsystem intakeSubsystem;

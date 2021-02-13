@@ -40,27 +40,18 @@ public class FetchPowerCellCommand extends Command {
 
   @Override
   protected void execute() {
-    Robot.vision.data();
+    Robot.objectTracker.data();
     double forward = 0;
     double strafe = 0;
     double rotation = 0;
 
-    final double deadzone = 0.1;
+    Double angle = Robot.objectTracker.getXAngle(0);
+    if (angle == null) return; //no object found
 
-    double angle = Robot.vision.getXAngle();
+    angleController.setSetpoint(angle);
 
-    boolean visionTargetFound = Robot.vision.targetExists();
-    SmartDashboard.putBoolean("TargetFound", visionTargetFound);
+    rotation = angleController.calculate(0);
 
-    if (visionTargetFound) {
-
-      angleController.setSetpoint(angle);
-
-      Robot.vision.printArea();
-      rotation = angleController.calculate(0);
-    }
-    
-    
     if(rotation > 1){
       rotation = 1;
     }else if(rotation < -1){
