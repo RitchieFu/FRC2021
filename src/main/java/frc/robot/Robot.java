@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
    * used for any initialization code.
    */
   @Override
-  public void robotInit() {
+public void robotInit() {
     autoHappened = false;
     oi = new OI();
     //m_chooser.setDefaultOption("Default Auto", new AutonomousCommand());

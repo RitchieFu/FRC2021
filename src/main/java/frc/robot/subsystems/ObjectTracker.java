@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -27,14 +29,14 @@ class VisionObject {
  */
 public class ObjectTracker extends Subsystem {
 	NetworkTable monsterVision; 
-    ArrayList<VisionObject> foundObjects; 
+    VisionObject[] foundObjects; 
 
 	// Put methods for controlling this subsystem
     // here. Call these from Commands.
 	public ObjectTracker(){
         NetworkTableInstance inst = NetworkTableInstance.getDefault(); 
         monsterVision = inst.getTable("MonsterVison");	
-        	
+        
         // monsterVision.addEntryListener(
         //     "ObjectTracker",
         //     (monsterVision, key, entry, value, flags) -> {
@@ -43,11 +45,21 @@ public class ObjectTracker extends Subsystem {
         // EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
                  
-	}
+    }
+    
+
     
     public void data() {
-        //TODO read network table and populate found objects
+        Gson gson = new Gson();
+        NetworkTableEntry entry = monsterVision.getEntry("ObjectTracker");
+        if(entry==null) {
+            return;
+        }
+        String json = entry.getString("ObjectTracker");
+        foundObjects = gson.fromJson(json, VisionObject[].class);
     }
+    
+    
     // private NetworkTableEntry getEntry(Integer index, String subkey) {
     //     try {
     //         NetworkTable table = monsterVision.getSubTable(index.toString());
@@ -60,42 +72,42 @@ public class ObjectTracker extends Subsystem {
     // }
 	
 	public String getLabel(int index) {
-        if (foundObjects.size() <= index) {
+        if (foundObjects.length <= index) {
             return null; 
         }
-        return foundObjects.get(index).objectLabel;
+        return foundObjects[index].objectLabel;
 	}
 
     public int numberOfObjects() {
-        return foundObjects.size(); 
+        return foundObjects.length; 
     }
     
     public Integer getX(int index) {
-        if (foundObjects.size() <= index) {
+        if (foundObjects.length <= index) {
             return null; 
         }
-        return foundObjects.get(index).x;
+        return foundObjects[index].x;
     }
     
     public Integer getY(int index) {
-        if (foundObjects.size() <= index) {
+        if (foundObjects.length <= index) {
             return null;
         }
-        return foundObjects.get(index).y;
+        return foundObjects[index].y;
     }
 
     public Integer getZ(int index) {
-        if (foundObjects.size() <= index) {
+        if (foundObjects.length <= index) {
             return null;
         }
-        return foundObjects.get(index).z;
+        return foundObjects[index].z;
     }
 
     public Integer getConfidence(int index) {
-        if (foundObjects.size() <= index) {
+        if (foundObjects.length <= index) {
             return null;
         }
-        return foundObjects.get(index).confidence;
+        return foundObjects[index].confidence;
     }
 
 
