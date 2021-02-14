@@ -71,11 +71,12 @@ public class FetchPowerCellCommand extends Command {
 
 @Override
 protected boolean isFinished() {
-  boolean isFinished = super.isTimedOut();
-  if (isFinished) {
-    SmartDashboard.putNumber("totalRotation", totalRotation);
-  }
-   return isFinished;
+  // boolean isFinished = super.isTimedOut();
+  // if (isFinished) {
+  //   SmartDashboard.putNumber("totalRotation", totalRotation);
+  // }
+  //  return isFinished;
+  return false;   // TODO: add the actual completion test code
 }
 
 @Override

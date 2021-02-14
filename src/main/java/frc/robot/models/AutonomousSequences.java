@@ -15,6 +15,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.AutonomousTrajectoryCommand;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.FetchPowerCellCommand;
 import frc.robot.commands.IntakeActuateCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDetectToElevatorIndexCommand;
@@ -25,6 +26,14 @@ import frc.robot.commands.VisionRotationDriveCommand;
 
 public class AutonomousSequences {
 
+        public static CommandGroup GoFetchTest() {
+                CommandGroup output = new CommandGroup();
+                FetchPowerCellCommand fpcCommand = new FetchPowerCellCommand();
+
+                output.addSequential(fpcCommand);
+                
+                return output;
+        }
 
         public static CommandGroup DriveLeftThenRight() {
                 CommandGroup output = new CommandGroup();

@@ -207,6 +207,7 @@ private void initChooser() {
  m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
  m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
+ m_chooser.addOption("GoFetchTest", AutonomousSequences.GoFetchTest());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 
