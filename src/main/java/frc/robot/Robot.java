@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
   public static DrivetrainSubsystem drivetrainSubsystem;
 
   public static Vision vision;
-  public static ObjectTracker objectTracker;
+  public static ObjectTrackerSubsystem objectTrackerSubsystem;
 
   public static ElevatorSubsystem elevatorSubsystem;
   public static IntakeSubsystem intakeSubsystem;
@@ -128,6 +128,7 @@ private void initSubsystems() {
   shooterSubsystem = new ShooterSubsystem();
   subsystemManager = new SubsystemManager(drivetrainSubsystem);
   intakeSubsystem = new IntakeSubsystem();
+  objectTrackerSubsystem = new ObjectTrackerSubsystem();
 }
 
 private void initCommands() {
@@ -301,9 +302,9 @@ private void initChooser() {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    if(autoHappened){
-      reverseZeroCommand.start();
-    }
+    // if(autoHappened){
+    //   reverseZeroCommand.start();
+    // }
     Robot.drivetrainSubsystem.getFollower().cancel();
 
     SmartDashboard.putNumber("ShooterMotor1", RobotMap.SHOOTER_MOTOR_HIGH_DEFAULT_SPEED);

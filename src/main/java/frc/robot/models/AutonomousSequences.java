@@ -227,10 +227,8 @@ public class AutonomousSequences {
 
         public static CommandGroup GalacticSearchRedPathA() {
                 CommandGroup output = new CommandGroup();
-                //RobotRotateCommand rotateCommand = new RobotRotateCommand(-26.56);
-                RobotRotateCommand rotateCommand = new RobotRotateCommand(-29.56); //FHE
-                //RobotRotateCommand rotateCommand2 = new RobotRotateCommand(98.12);
-                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(96.12); //FHE
+                RobotRotateCommand rotateCommand = new RobotRotateCommand(23.56);
+                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-64.12);
                 IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
 
                 Path driveForward = new Path(Rotation2.ZERO);
@@ -270,10 +268,10 @@ public class AutonomousSequences {
 
                 output.addParallel(lowerIntake);
                 output.addParallel(driveForwardCommand);
-                output.addSequential(new IntakeDetectToElevatorIndexCommand(3));
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
                 output.addSequential(rotateCommand, 2);
                 output.addParallel(driveToD5Command);
-                output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
                 output.addSequential(rotateCommand2, 2);
                 output.addParallel(driveToA6Command);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(8));

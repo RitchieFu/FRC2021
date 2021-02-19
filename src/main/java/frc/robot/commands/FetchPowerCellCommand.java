@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.models.VisionObject;
 
 
 public class FetchPowerCellCommand extends Command {
@@ -40,14 +41,16 @@ public class FetchPowerCellCommand extends Command {
 
   @Override
   protected void execute() {
-    Robot.objectTracker.data();
+    Robot.objectTrackerSubsystem.data();
     double forward = 0;
     double strafe = 0;
     double rotation = 0;
 
-    Double angle = Robot.objectTracker.getXAngle(0);
-    if (angle == null) return; //no object found
-
+    VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
+    if (closestObject == null) 
+      return; // no object found
+    double angle =  Math.atan2(closestObject.x, closestObject.z);
+    
     angleController.setSetpoint(angle);
 
     rotation = angleController.calculate(0);
