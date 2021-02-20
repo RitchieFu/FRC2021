@@ -20,12 +20,16 @@ import frc.robot.models.VisionObject;
 public class FetchPowerCellCommand extends Command {
 
   PIDController angleController;
+  PIDController strafeController;
+  PIDController forwardController; 
 
   public double totalRotation = 0;
   public FetchPowerCellCommand() {
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
     angleController = new PIDController(0.01, 0.015, 0);
+    strafeController = new PIDController(0, 0, 0); // TODO update constants
+    forwardController = new PIDController(0, 0, 0); // TODO update constants
   }
 
   public FetchPowerCellCommand(double timeout) {
@@ -33,6 +37,9 @@ public class FetchPowerCellCommand extends Command {
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
     angleController = new PIDController(0.01, 0.015, 0);
+    strafeController = new PIDController(0, 0, 0); // TODO update constants
+    forwardController = new PIDController(0, 0, 0); // TODO update constants
+
   }
 
   @Override
@@ -49,10 +56,11 @@ public class FetchPowerCellCommand extends Command {
     VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
     if (closestObject == null) 
       return; // no object found
+
     double angle =  Math.atan2(closestObject.x, closestObject.z);
     
+    // angle
     angleController.setSetpoint(angle);
-
     rotation = angleController.calculate(0);
 
     if(rotation > 1){
@@ -63,7 +71,31 @@ public class FetchPowerCellCommand extends Command {
 
     totalRotation += rotation;
     SmartDashboard.putNumber("driveRotation", rotation);
+    
+    // strafe
+    strafeController.setSetpoint(closestObject.x);
+    strafe = strafeController.calculate(0);
 
+    if(strafe > 1){
+      strafe = 1;
+    }else if (strafe < -1){
+      strafe = -1;
+    }
+
+    SmartDashboard.putNumber("driveStrafe", strafe);
+
+    // forward
+    forwardController.setSetpoint(closestObject.z); // TODO figure out how to implement code that begins intake process 
+    forward = forwardController.calculate(0);
+
+    if(forward > 1){
+      forward = 1;
+    }else if (forward < -1){
+      forward = -1;
+    }
+
+    SmartDashboard.putNumber("driveForward", forward);
+    
     final boolean robotOriented = false;
 
     final Vector2 translation = new Vector2(forward, strafe);
