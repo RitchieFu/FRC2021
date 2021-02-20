@@ -68,11 +68,11 @@ public class ObjectTrackerSubsystem extends Subsystem {
     // }
 	
 	public VisionObject getClosestObject(String objectLabel) {
-        if (foundObjects == null || foundObjects.length == 0) {
+        VisionObject[] objects = getObjectsOfType(objectLabel);
+        if (objects == null || objects.length == 0) {
             return null; 
         }
-        VisionObject[] objects = getObjectsOfType(objectLabel);
-        return foundObjects[0];
+        return objects[0];
 	}
 
     public int numberOfObjects() {
@@ -83,13 +83,14 @@ public class ObjectTrackerSubsystem extends Subsystem {
 
         if (foundObjects == null || foundObjects.length == 0)
             return null;
-            List<VisionObject> filteredResult = Arrays.asList(foundObjects)
+
+        List<VisionObject> filteredResult = Arrays.asList(foundObjects)
             .stream()
             .filter(vo -> vo.objectLabel.equals(objectLabel))
             .collect(Collectors.toList());
 
-            VisionObject filteredArray[] = new VisionObject[filteredResult.size()];
-            return filteredResult.toArray(filteredArray);
+        VisionObject filteredArray[] = new VisionObject[filteredResult.size()];
+        return filteredResult.toArray(filteredArray);
 
     }
 
