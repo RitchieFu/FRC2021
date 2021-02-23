@@ -27,23 +27,27 @@ public class FetchPowerCellCommand extends Command {
   public FetchPowerCellCommand() {
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
-    angleController = new PIDController(0.01, 0.015, 0);
-    strafeController = new PIDController(0, 0, 0); // TODO update constants
-    forwardController = new PIDController(0, 0, 0); // TODO update constants
+    angleController = new PIDController(0.3, 0.01, 0.0);
+    strafeController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
+    forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
   }
 
   public FetchPowerCellCommand(double timeout) {
     super(timeout);
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
-    angleController = new PIDController(0.01, 0.015, 0);
-    strafeController = new PIDController(0, 0, 0); // TODO update constants
-    forwardController = new PIDController(0, 0, 0); // TODO update constants
+    angleController = new PIDController(0.3, 0.01, 0.0);
+    strafeController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
+    forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
 
   }
 
   @Override
   protected void initialize() {
+    Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle());
+ 
+    Vector2 position = new Vector2(0, 0);
+    Robot.drivetrainSubsystem.resetKinematics(position, 0);
   }
 
   @Override
@@ -54,8 +58,12 @@ public class FetchPowerCellCommand extends Command {
     double rotation = 0;
 
     VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
-    if (closestObject == null) 
+    if (closestObject == null) {
+      SmartDashboard.putNumber("driveRotation", 99);
+      Robot.drivetrainSubsystem.holonomicDrive(new Vector2(0,0), 0, false);
       return; // no object found
+    }
+      
 
     double angle =  Math.atan2(closestObject.x, closestObject.z);
     
@@ -98,7 +106,9 @@ public class FetchPowerCellCommand extends Command {
     
     final boolean robotOriented = false;
 
-    final Vector2 translation = new Vector2(forward, strafe);
+    final Vector2 translation = new Vector2(-forward * 0.1, -strafe * 0.1);
+    // final Vector2 translation = new Vector2(0, 0);
+
 
     Robot.drivetrainSubsystem.holonomicDrive(translation, rotation, !robotOriented);
   }
