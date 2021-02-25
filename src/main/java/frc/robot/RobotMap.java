@@ -81,6 +81,7 @@ public class RobotMap {
   //public static final double CAMERA_ANGLE = -1*Math.atan(TARGET_HEIGHT/183);
   public static final double CAMERA_ANGLE = Math.toRadians(26);
 
+  public static final double TARGET_TRIGGER_DISTANCE = 26; // inches
   /**
 	 * Which PID slot to pull gains from. Starting 2018, you can choose from
 	 * 0,1,2 or 3. Only the first two (0,1) are visible in web-based

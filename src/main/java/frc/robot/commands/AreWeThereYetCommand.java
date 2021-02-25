@@ -10,9 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.models.VisionObject;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class AreWeThereYetCommand extends Command {
-    private double TargetTriggerDistance = 26; // inches
     
     public AreWeThereYetCommand() {
     
@@ -37,7 +37,7 @@ public class AreWeThereYetCommand extends Command {
       if (closestObject == null) 
         return false; // no object found
 
-      return closestObject.z < this.TargetTriggerDistance;
+      return closestObject.z < RobotMap.TARGET_TRIGGER_DISTANCE;
     }
 
   // Called once after isFinished returns true

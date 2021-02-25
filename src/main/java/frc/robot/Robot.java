@@ -289,6 +289,9 @@ private void initChooser() {
    */
   @Override
   public void autonomousPeriodic() {
+    SmartDashboard.putNumber("Navx angle:", Robot.drivetrainSubsystem.getGyroscope().getAngle().toRadians());
+    SmartDashboard.putNumber("Unadjusted angle:", Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle().toRadians());
+    //SmartDashboard.putString("Hey dummy", "don't forget to uncomment zero command");
     Scheduler.getInstance().run();
     //System.out.println(drivetrainSubsystem.getGyroscope().getRate());
   }

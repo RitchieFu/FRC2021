@@ -14,21 +14,24 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.models.VisionObject;
 
 
 public class FetchPowerCellCommand extends Command {
-
   PIDController angleController;
   PIDController strafeController;
   PIDController forwardController; 
+  double gyroAngle;
+  double angle;
+  double desiredAngle;
 
   public double totalRotation = 0;
   public FetchPowerCellCommand() {
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
     angleController = new PIDController(0.3, 0.01, 0.0);
-    strafeController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
+    strafeController = new PIDController(0, 0.0, 0.0); // TODO update constants
     forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
   }
 
@@ -37,15 +40,25 @@ public class FetchPowerCellCommand extends Command {
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
     angleController = new PIDController(0.3, 0.01, 0.0);
-    strafeController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
+    strafeController = new PIDController(0.0, 0.0, 0.0); // TODO update constants
     forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
 
   }
 
   @Override
   protected void initialize() {
-    Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle());
- 
+    //Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getAdjustmentAngle()); 
+    Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(new Rotation2(0, 1, false)); //TODO for testing only
+    VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
+    if (closestObject == null) {
+      return; // no object found
+    }
+
+    gyroAngle = Robot.drivetrainSubsystem.getGyroscope().getAngle().toRadians();
+    angle =  Math.atan2(closestObject.x, closestObject.z);
+    desiredAngle = -angle + gyroAngle;
+    SmartDashboard.putNumber("Vision angle", angle);
+    SmartDashboard.putNumber("Setpoint angle", desiredAngle);
     Vector2 position = new Vector2(0, 0);
     Robot.drivetrainSubsystem.resetKinematics(position, 0);
   }
@@ -64,12 +77,13 @@ public class FetchPowerCellCommand extends Command {
       return; // no object found
     }
       
-
-    double angle =  Math.atan2(closestObject.x, closestObject.z);
+    gyroAngle = Robot.drivetrainSubsystem.getGyroscope().getAngle().toRadians();
+    SmartDashboard.putNumber("Process angle", gyroAngle);
+    //double angle =  Math.atan2(closestObject.x, closestObject.z);
     
     // angle
-    angleController.setSetpoint(angle);
-    rotation = angleController.calculate(0);
+    angleController.setSetpoint(desiredAngle);
+    rotation = angleController.calculate(gyroAngle);
 
     if(rotation > 1){
       rotation = 1;
@@ -93,7 +107,7 @@ public class FetchPowerCellCommand extends Command {
     SmartDashboard.putNumber("driveStrafe", strafe);
 
     // forward
-    forwardController.setSetpoint(closestObject.z); // TODO figure out how to implement code that begins intake process 
+    forwardController.setSetpoint(closestObject.z-RobotMap.TARGET_TRIGGER_DISTANCE); // TODO figure out how to implement code that begins intake process 
     forward = forwardController.calculate(0);
 
     if(forward > 1){
@@ -106,7 +120,7 @@ public class FetchPowerCellCommand extends Command {
     
     final boolean robotOriented = false;
 
-    final Vector2 translation = new Vector2(-forward * 0.1, -strafe * 0.1);
+    final Vector2 translation = new Vector2(-forward * 0, -strafe * 0);
     // final Vector2 translation = new Vector2(0, 0);
 
 
@@ -116,12 +130,19 @@ public class FetchPowerCellCommand extends Command {
 
 @Override
 protected boolean isFinished() {
+  double tolerance = 2;
+  VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
+  if(closestObject == null) {
+    return true;
+  }//TODO could lose sight for small amount of time causing command to finish early
+
+  return Math.abs(closestObject.z-RobotMap.TARGET_TRIGGER_DISTANCE) <= tolerance;
   // boolean isFinished = super.isTimedOut();
   // if (isFinished) {
   //   SmartDashboard.putNumber("totalRotation", totalRotation);
   // }
   //  return isFinished;
-  return false;   // TODO: add the actual completion test code
+     // TODO: add the actual completion test code
 }
 
 @Override

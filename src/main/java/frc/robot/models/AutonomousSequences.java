@@ -228,7 +228,7 @@ public class AutonomousSequences {
         public static CommandGroup GalacticSearchRedPathA() {
                 CommandGroup output = new CommandGroup();
                 RobotRotateCommand rotateCommand = new RobotRotateCommand(23.56);
-                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-64.12);
+                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-75.12);
                 IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
 
                 Path driveForward = new Path(Rotation2.ZERO);
