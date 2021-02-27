@@ -70,6 +70,6 @@ public class OI {
 
   Button shooterElevationButton = new JoystickButton(leftStick, RobotMap.L_SHOOTER_ELEVATION_BUTTON);
 
-
+  Button snapShotButton = new JoystickButton(leftStick, RobotMap.L_SNAPSHOT_BUTTON);
  
 }

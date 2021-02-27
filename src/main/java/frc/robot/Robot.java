@@ -26,6 +26,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.AutonomousCommandGroups.AutonomousShooterToTrenchSequence;
 import frc.robot.models.AutonomousSequences;
 import frc.robot.models.AutonomousTrajectories;
+import frc.robot.models.PathSelecter;
 import frc.robot.subsystems.*;
 
 
@@ -96,6 +97,8 @@ public class Robot extends TimedRobot {
   VisionRotationDriveCommand visionRotationDriveCommand;
   RobotRotateCommand robotRotateCommand;
 
+  SnapshotCommand snapshotCommand;
+
 
 
   boolean autoHappened;
@@ -163,6 +166,7 @@ private void initCommands() {
     lowerShooterCommand = new ShooterActuateCommand(true, 3);
     shooterToggleCommand = new ShooterToggleCommand();
 
+    snapshotCommand = new SnapshotCommand();
  }
 
 private void initButtons() {
@@ -189,7 +193,7 @@ private void initButtons() {
     oi.referenceResetButton.whenPressed(zeroCommand);
     oi.shooterNoVisionButton.whileHeld(shooterNoVisionCommand);
     oi.shooterVisionButton.whileHeld(shooterWithVisionCommand);
-
+    oi.snapShotButton.whenPressed(snapshotCommand);
 
 }
 
@@ -268,9 +272,8 @@ private void initChooser() {
     autoHappened = true;
     subsystemManager.enableKinematicLoop(UPDATE_DT);
     zeroCommand.start();
-
     autonomousCommand = m_chooser.getSelected();
-   
+    
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -289,8 +292,8 @@ private void initChooser() {
    */
   @Override
   public void autonomousPeriodic() {
-    SmartDashboard.putNumber("Navx angle:", Robot.drivetrainSubsystem.getGyroscope().getAngle().toRadians());
-    SmartDashboard.putNumber("Unadjusted angle:", Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle().toRadians());
+    //SmartDashboard.putNumber("Navx angle:", Robot.drivetrainSubsystem.getGyroscope().getAngle().toRadians());
+    //SmartDashboard.putNumber("Unadjusted angle:", Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle().toRadians());
     //SmartDashboard.putString("Hey dummy", "don't forget to uncomment zero command");
     Scheduler.getInstance().run();
     //System.out.println(drivetrainSubsystem.getGyroscope().getRate());
@@ -315,7 +318,7 @@ private void initChooser() {
 
     subsystemManager.enableKinematicLoop(UPDATE_DT);
     zeroCommand.start();
-
+    SmartDashboard.putString("Path", PathSelecter.choosePath());
   }
 
   /**
