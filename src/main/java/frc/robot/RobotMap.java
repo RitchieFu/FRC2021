@@ -72,7 +72,7 @@ public class RobotMap {
   public static final int R_ELEVATOR_DOWN_BUTTON = 8;
   public static final int R_ELEVATOR_UP_BUTTON = 9;
   public static final int R_INTAKE_IN_BUTTON = 10;
-  public static final int R_INTAKE_OUT_BUTTON = 11;
+  public static final int R_INTAKE_OUT_BUTTON = 5;
   
   
 
@@ -115,8 +115,8 @@ public class RobotMap {
 	 //public final static Gains kGains_Velocit = new Gains( kP, kI, kD, kF,  0,  1.00);
 	 public final static Gains kGains_Velocit = new Gains(kP, 0.0, 0.0, kF,  0,  1.00);
 
-   public final static double SHOOTER_MOTOR_HIGH_DEFAULT_SPEED = 600;
-   public final static double SHOOTER_MOTOR_LOW_DEFAULT_SPEED = 900;
+   public final static double SHOOTER_MOTOR_HIGH_DEFAULT_SPEED = 2600;
+   public final static double SHOOTER_MOTOR_LOW_DEFAULT_SPEED = 3100;
    public final static double SHOOTER_INTITIATION_LINE_UPPER_MOTOR_SPEED = 1742;
 
 

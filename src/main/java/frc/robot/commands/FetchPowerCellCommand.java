@@ -38,7 +38,7 @@ public class FetchPowerCellCommand extends Command {
     angleController = new PIDController(0.03, 0.01, 0.0);
     strafeController = new PIDController(0, 0.0, 0.0); // TODO update constants
     forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
-    navX = new AHRS(SPI.Port.kMXP, (byte) 200);
+    // navX = new AHRS(SPI.Port.kMXP, (byte) 200);
   }
 
   public FetchPowerCellCommand(double timeout) {
@@ -49,7 +49,8 @@ public class FetchPowerCellCommand extends Command {
     angleController = new PIDController(0.03, 0.01, 0.0);
     strafeController = new PIDController(0.0, 0.0, 0.0); // TODO update constants
     forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
-    navX = new AHRS(SPI.Port.kMXP, (byte) 200);
+    // navX = new AHRS(SPI.Port.kMXP, (byte) 200);
+    navX = null;
   }
 
   @Override

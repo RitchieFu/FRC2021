@@ -30,9 +30,9 @@ public class IntakeCommand extends Command {
   @Override
   protected void execute() {
     if (m_reverse) {
-      Robot.intakeSubsystem.setIntakeMotor(0.5);
+      Robot.intakeSubsystem.setIntakeMotor(0.75);
     } else {
-      Robot.intakeSubsystem.setIntakeMotor(-0.5);
+      Robot.intakeSubsystem.setIntakeMotor(-0.75);
     }
    
     //Robot.elevatorSubsystem.setBottomKickerMotor(1);

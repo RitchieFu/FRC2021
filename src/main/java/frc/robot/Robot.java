@@ -193,7 +193,7 @@ private void initButtons() {
     oi.referenceResetButton.whenPressed(zeroCommand);
     oi.shooterNoVisionButton.whileHeld(shooterNoVisionCommand);
     oi.shooterVisionButton.whileHeld(shooterWithVisionCommand);
-    oi.snapShotButton.whenPressed(snapshotCommand);
+    //oi.snapShotButton.whenPressed(snapshotCommand);
 
 }
 
@@ -273,7 +273,17 @@ private void initChooser() {
     subsystemManager.enableKinematicLoop(UPDATE_DT);
     zeroCommand.start();
     autonomousCommand = m_chooser.getSelected();
+
+    // String chosenPath = PathSelecter.choosePath();
+    // SmartDashboard.putString("Path", chosenPath);
     
+    // switch (chosenPath) {
+    //   case "PathRedA":
+    //     autonomousCommand = AutonomousSequences.GalacticSearchRedPathA();
+    //     break;
+    // }
+    //autonomousCommand = AutonomousSequences.GalacticSearchBluePathA();
+
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -318,7 +328,7 @@ private void initChooser() {
 
     subsystemManager.enableKinematicLoop(UPDATE_DT);
     zeroCommand.start();
-    SmartDashboard.putString("Path", PathSelecter.choosePath());
+   // SmartDashboard.putString("Path", PathSelecter.choosePath());
   }
 
   /**

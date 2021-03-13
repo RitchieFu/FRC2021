@@ -41,7 +41,7 @@ public class AutonomousSequences {
                 driveLeft.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2( 0.0, -40)
+                                new Vector2( 0.0, -120)
                         )
                 );
                 
@@ -52,7 +52,7 @@ public class AutonomousSequences {
                 driveRight.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2( 0.0, 40)
+                                new Vector2( 0.0, 120)
                         )
                 );
                 
@@ -72,24 +72,23 @@ public class AutonomousSequences {
                 driveForward.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(-100, 0.0)
+                                new Vector2(-180, 0.0)
                         )
                 );
                 
-                Trajectory driveforwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                Trajectory driveforwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
                 AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveforwardTrajectory);
 
                 Path driveBackward = new Path(Rotation2.ZERO);
                 driveBackward.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(100, 0.0)
+                                new Vector2(180, 0.0)
                         )
                 );
                 
-                Trajectory drivebackwardTrajectory = new Trajectory(driveBackward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                Trajectory drivebackwardTrajectory = new Trajectory(driveBackward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
                 AutonomousTrajectoryCommand driveBackwardCommand = new AutonomousTrajectoryCommand(drivebackwardTrajectory);
-
 
                 output.addSequential(driveForwardCommand);
                 output.addSequential(driveBackwardCommand);
@@ -227,9 +226,9 @@ public class AutonomousSequences {
 
         public static CommandGroup GalacticSearchRedPathA() {
                 CommandGroup output = new CommandGroup();
-                RobotRotateCommand rotateCommand = new RobotRotateCommand(23.56);
-                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-75.12);
-                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
+                RobotRotateCommand rotateCommand = new RobotRotateCommand(20.8); // before 23.56, which is too far over
+                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-82.12); // before -85.12 when rotateCommand angle was 23.56
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false, 1);
 
                 Path driveForward = new Path(Rotation2.ZERO);
                 driveForward.addSegment(
@@ -239,7 +238,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
                 AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
 
                 
@@ -251,7 +250,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.CONSTRAINTS);
+                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
                 AutonomousTrajectoryCommand driveToD5Command = new AutonomousTrajectoryCommand(driveToD5Trajectory);
 
 
@@ -263,7 +262,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.CONSTRAINTS);
+                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
                 AutonomousTrajectoryCommand driveToA6Command = new AutonomousTrajectoryCommand(driveToA6Trajectory);
 
                 output.addParallel(lowerIntake);
@@ -282,7 +281,7 @@ public class AutonomousSequences {
         public static CommandGroup GalacticSearchBluePathA() {
                 CommandGroup output = new CommandGroup();
                 IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
-                RobotRotateCommand rotateCommand0 = new RobotRotateCommand(71.56); 
+                RobotRotateCommand rotateCommand0 = new RobotRotateCommand(-71.56); 
                 RobotRotateCommand rotateCommand1 = new RobotRotateCommand(-97.12); 
                 
                 Path driveForward = new Path(Rotation2.ZERO);
