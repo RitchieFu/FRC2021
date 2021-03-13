@@ -290,7 +290,7 @@ private void initChooser() {
      * = new MyAutoCommand(); break; case "Default Auto": default:
      * autonomousCommand = new ExampleCommand(); break; }
      */
-    autonomousCommand = AutonomousSequences.GalacticSearchBluePathA();
+  
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {

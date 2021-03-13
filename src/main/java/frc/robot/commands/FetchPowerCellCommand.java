@@ -28,59 +28,31 @@ public class FetchPowerCellCommand extends Command {
   double angle;
   double desiredAngle;
   double setPointAngle=6;
-  AHRS navX;
 
   public double totalRotation = 0;
   public FetchPowerCellCommand() {
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
-    //angleController = new PIDController(0.3, 0.01, 0.0);
-    angleController = new PIDController(0.03, 0.01, 0.0);
+    angleController = new PIDController(0.4, 0.01, 0.0);
     strafeController = new PIDController(0, 0.0, 0.0); // TODO update constants
     forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
-    // navX = new AHRS(SPI.Port.kMXP, (byte) 200);
+   
   }
 
   public FetchPowerCellCommand(double timeout) {
     super(timeout);
     requires(Robot.drivetrainSubsystem);
     //PidConstants PID_CONSTANTS = new PidConstants(0.3, 0.01, 0.0);
-    //angleController = new PIDController(0.3, 0.01, 0.0);
-    angleController = new PIDController(0.03, 0.01, 0.0);
+    angleController = new PIDController(0.4, 0.01, 0.0);
     strafeController = new PIDController(0.0, 0.0, 0.0); // TODO update constants
     forwardController = new PIDController(0.05, 0.01, 0.0); // TODO update constants
     // navX = new AHRS(SPI.Port.kMXP, (byte) 200);
-    navX = null;
+    
   }
 
   @Override
   protected void initialize() {
     
-    //Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getAdjustmentAngle()); 
-    //Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(new Rotation2(0, 1, false)); //TODO for testing only
-    // VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
-    // if (closestObject == null) {
-    //   return; // no object found
-    // }
-    navX.reset();
-    gyroAngle = navX.getFusedHeading()*Math.PI/180;
-
-    //gyroAngle = Robot.drivetrainSubsystem.getGyroscope().getAngle().toRadians();
-    // angle =  Math.atan2(closestObject.x, closestObject.z);
-    // desiredAngle = angle + gyroAngle;
-    
-    // if (gyroAngle<=Math.PI/2 && desiredAngle>0) {
-    //   setPointAngle = desiredAngle;
-    // }
-    // else if(gyroAngle<=Math.PI/2 && desiredAngle<0) {
-    //   setPointAngle = 0;
-    // }
-    // else if(gyroAngle>=Math.PI/2 && desiredAngle<2*Math.PI && desiredAngle>Math.PI/2) {
-    //   setPointAngle = desiredAngle;
-    // }
-    // else if(gyroAngle>=Math.PI/2 && desiredAngle<Math.PI/2) {
-    //   setPointAngle = Math.PI*2;
-    // }
     
     SmartDashboard.putNumber("Vision angle", angle);
     SmartDashboard.putNumber("Desired angle", desiredAngle);
@@ -98,24 +70,18 @@ public class FetchPowerCellCommand extends Command {
     double strafe = 0;
     double rotation = 0;
 
-    // VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
-    // if (closestObject == null) {
-    //   SmartDashboard.putNumber("driveRotation", 99);
-    //   Robot.drivetrainSubsystem.holonomicDrive(new Vector2(0,0), 0, false);
-    //   return; // no object found
-    // }
+     VisionObject closestObject = Robot.objectTrackerSubsystem.getClosestObject("powerCell");
+     if (closestObject == null) {
+       SmartDashboard.putNumber("driveRotation", 99);
+       Robot.drivetrainSubsystem.holonomicDrive(new Vector2(0,0), 0, false);
+       return; // no object found
+     }
+     closestObject.motionCompensate(Robot.drivetrainSubsystem, false);
+  
+    double angle =  Math.atan2(closestObject.x, closestObject.z);
     
-    //gyroAngle = Robot.drivetrainSubsystem.getGyroscope().getAngle().toRadians();
-    
-    gyroAngle = navX.getFusedHeading()*Math.PI/180;
-
-    SmartDashboard.putNumber("Process angle", gyroAngle);
-    //double angle =  Math.atan2(closestObject.x, closestObject.z);
-    //SmartDashboard.putNumber("Updated Vision angle", Math.atan2(closestObject.x, closestObject.z));
-    
-    //angleController.setSetpoint(desiredAngle);
-    angleController.setSetpoint(setPointAngle);
-    rotation = angleController.calculate(gyroAngle);
+    angleController.setSetpoint(angle);
+    rotation = angleController.calculate(0);
     
     if(rotation > 1){
       rotation = 1;
@@ -152,11 +118,9 @@ public class FetchPowerCellCommand extends Command {
     
     final boolean robotOriented = false;
 
-    final Vector2 translation = new Vector2(-forward * 0, -strafe * 0);
-    // final Vector2 translation = new Vector2(0, 0);
+    final Vector2 translation = new Vector2(-forward*0, -strafe * 0);
 
-
-    Robot.drivetrainSubsystem.holonomicDrive(translation, rotation*0, !robotOriented);
+    Robot.drivetrainSubsystem.holonomicDrive(translation, rotation, !robotOriented);
   }
 
 

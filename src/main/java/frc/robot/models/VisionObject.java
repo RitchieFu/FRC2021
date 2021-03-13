@@ -1,5 +1,9 @@
 package frc.robot.models;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotMap;
+import frc.robot.subsystems.DrivetrainSubsystem;
+
 public class VisionObject {
     public String objectLabel; 
     public double x;
@@ -16,7 +20,32 @@ public class VisionObject {
         this.z = z;
     }
 
+    public void motionCompensate(DrivetrainSubsystem drivetrainSubsystem, boolean compensateTranslation)
+{
+    // if (compensateTranslation) {
+    // // Normally, we'd subtract the distance travelled.  However, the camera points off the back
+    // // of the robot.  Therefore, motion in the direction the camera is aiming is returned by
+    // // getVelocityX() as negative.
+        
+    //     z += drivetrainSubsystem.getVelocityX() * latency;
+    // }
+
+    double omega = drivetrainSubsystem.getGyroscope().getRate();
+    double theta = omega * RobotMap.OBJECT_DETECTION_LATENCY;
+    //System.out.println("theta: " + theta); 
+
+    double cosTheta = Math.cos(theta);
+    double sinTheta = Math.sin(theta);
+
+    double newZ = z * cosTheta - x * sinTheta;
+    double newX = z * sinTheta + x * cosTheta;
+
+    z = newZ;
+    x = newX;
+}
 };
+
+
 
 
 /*
