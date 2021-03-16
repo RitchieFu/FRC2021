@@ -11,6 +11,7 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.AutonomousTrajectoryCommand;
@@ -145,7 +146,7 @@ public class AutonomousSequences {
                                 new Vector2(-30, 0.0)
                         )
                 );
-                
+            
                 Trajectory driveForwardTrajectory4 = new Trajectory(driveForward4, Robot.drivetrainSubsystem.CONSTRAINTS);
                 AutonomousTrajectoryCommand driveForwardCommand4 = new AutonomousTrajectoryCommand(driveForwardTrajectory4);
 
@@ -340,6 +341,62 @@ public class AutonomousSequences {
                 return output; 
 
                 // Why dont we make a function that takes the params for movement and such then returns the AutonomousTrajectoryCommand to make the code smaller, just an idea
+        }
+
+        public static CommandGroup GalacticSearchRedPathARotate() {
+                CommandGroup output = new CommandGroup();
+                double firstRotate = 20.8;
+                double secondRotate = -78.988;
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false, 1);
+                Rotation2 firstRotation = new Rotation2(Math.cos(firstRotate*Math.PI/180), Math.sin(secondRotate*Math.PI/180), true);
+                Rotation2 secondRotation = new  Rotation2(Math.cos(secondRotate*Math.PI/180), Math.sin(secondRotate*Math.PI/180), true);
+
+                Path driveForward = new Path(Rotation2.ZERO);
+                driveForward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-29.0, 0.0)
+                        ), firstRotation
+                );
+                
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+                
+                Path driveToD5 = new Path(Rotation2.ZERO);
+                driveToD5.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-78, 0.0)
+                        ), secondRotation
+                );
+                
+                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                AutonomousTrajectoryCommand driveToD5Command = new AutonomousTrajectoryCommand(driveToD5Trajectory);
+
+
+                Path driveToA6 = new Path(Rotation2.ZERO);
+                driveToA6.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-105, 0.0)
+                        )
+                );
+                
+                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                AutonomousTrajectoryCommand driveToA6Command = new AutonomousTrajectoryCommand(driveToA6Trajectory);
+
+                output.addParallel(lowerIntake);
+                output.addParallel(driveForwardCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
+                output.addSequential(rotateCommand, 2);
+                output.addParallel(driveToD5Command);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
+                output.addSequential(rotateCommand2, 2);
+                output.addParallel(driveToA6Command);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(8));
+
+                return output; 
         }
 
         public CommandGroup buildDriveAndCollect(Vector2 startPose, Vector2 endPose)

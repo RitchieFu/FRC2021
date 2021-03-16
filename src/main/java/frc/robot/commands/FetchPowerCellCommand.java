@@ -76,7 +76,7 @@ public class FetchPowerCellCommand extends Command {
        Robot.drivetrainSubsystem.holonomicDrive(new Vector2(0,0), 0, false);
        return; // no object found
      }
-     closestObject.motionCompensate(Robot.drivetrainSubsystem, false);
+     closestObject.motionCompensate(Robot.drivetrainSubsystem, true);
   
     double angle =  Math.atan2(closestObject.x, closestObject.z);
     
@@ -118,7 +118,7 @@ public class FetchPowerCellCommand extends Command {
     
     final boolean robotOriented = false;
 
-    final Vector2 translation = new Vector2(-forward*0, -strafe * 0);
+    final Vector2 translation = new Vector2(-forward, -strafe*0);
 
     Robot.drivetrainSubsystem.holonomicDrive(translation, rotation, !robotOriented);
   }

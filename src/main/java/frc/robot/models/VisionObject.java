@@ -21,28 +21,31 @@ public class VisionObject {
     }
 
     public void motionCompensate(DrivetrainSubsystem drivetrainSubsystem, boolean compensateTranslation)
-{
-    // if (compensateTranslation) {
-    // // Normally, we'd subtract the distance travelled.  However, the camera points off the back
-    // // of the robot.  Therefore, motion in the direction the camera is aiming is returned by
-    // // getVelocityX() as negative.
+    {
+        if (compensateTranslation) {
+        // Normally, we'd subtract the distance travelled.  However, the camera points off the back
+        // of the robot.  Therefore, motion in the direction the camera is aiming is returned by
+        // getVelocityX() as negative.
+            
+            z += drivetrainSubsystem.getKinematicVelocity().x * RobotMap.OBJECT_DETECTION_LATENCY;
+            x -= drivetrainSubsystem.getKinematicVelocity().y * RobotMap.OBJECT_DETECTION_LATENCY;
+            SmartDashboard.putNumber("X Velocity", drivetrainSubsystem.getKinematicVelocity().x);
+            SmartDashboard.putNumber("Z Velocity", drivetrainSubsystem.getKinematicPosition().y);
+        }
         
-    //     z += drivetrainSubsystem.getVelocityX() * latency;
-    // }
+        double omega = drivetrainSubsystem.getGyroscope().getRate();
+        double theta = omega * RobotMap.OBJECT_DETECTION_LATENCY;
+        //System.out.println("theta: " + theta); 
 
-    double omega = drivetrainSubsystem.getGyroscope().getRate();
-    double theta = omega * RobotMap.OBJECT_DETECTION_LATENCY;
-    //System.out.println("theta: " + theta); 
+        double cosTheta = Math.cos(theta);
+        double sinTheta = Math.sin(theta);
 
-    double cosTheta = Math.cos(theta);
-    double sinTheta = Math.sin(theta);
+        double newZ = z * cosTheta - x * sinTheta;
+        double newX = z * sinTheta + x * cosTheta;
 
-    double newZ = z * cosTheta - x * sinTheta;
-    double newX = z * sinTheta + x * cosTheta;
-
-    z = newZ;
-    x = newX;
-}
+        z = newZ;
+        x = newX;
+    }
 };
 
 
