@@ -200,19 +200,20 @@ private void initButtons() {
 private void initChooser() {
   
  m_chooser = new SendableChooser<>();
- m_chooser.addOption("Shoot, Collect Right", AutonomousSequences.ShootThenCollectRight());
- m_chooser.addOption("Shoot, Collect Right, Shoot Again ", AutonomousSequences.ShootThenCollectRight_ThenShootAgain());
- m_chooser.addOption("Leave Initiation Line", AutonomousSequences.backAwayFromInitiationLine());
- m_chooser.addOption("Shoot from Right, Collect Right, Shoot Again", AutonomousSequences.ShootFromRight_Of_Optimal_Then_Collect());
- m_chooser.addOption("Shoot Then Leave Initiation Line", AutonomousSequences.shootThenBackAwayFromInitiationLine());
- m_chooser.addOption("Shoot, Collect Left", AutonomousSequences.ShootThenCollectLeft());
+//  m_chooser.addOption("Shoot, Collect Right", AutonomousSequences.ShootThenCollectRight());
+//  m_chooser.addOption("Shoot, Collect Right, Shoot Again ", AutonomousSequences.ShootThenCollectRight_ThenShootAgain());
+//  m_chooser.addOption("Leave Initiation Line", AutonomousSequences.backAwayFromInitiationLine());
+//  m_chooser.addOption("Shoot from Right, Collect Right, Shoot Again", AutonomousSequences.ShootFromRight_Of_Optimal_Then_Collect());
+//  m_chooser.addOption("Shoot Then Leave Initiation Line", AutonomousSequences.shootThenBackAwayFromInitiationLine());
+//  m_chooser.addOption("Shoot, Collect Left", AutonomousSequences.ShootThenCollectLeft());
  m_chooser.addOption("Rotate 90 degrees", AutonomousSequences.RotateTest());
- m_chooser.addOption("Galactic-Seearch Red A", AutonomousSequences.GalacticSearchRedPathA());
- m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
- m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
- m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
- m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
+ m_chooser.addOption("Galactic-Search Red A", AutonomousSequences.GalacticSearchRedPathA());
+//  m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
+//  m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
+//  m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
+//  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
  m_chooser.addOption("GoFetchTest", AutonomousSequences.GoFetchTest());
+ m_chooser.addOption("Galactic-Search Blue A", AutonomousSequences.GalacticSearchBluePathA());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 
