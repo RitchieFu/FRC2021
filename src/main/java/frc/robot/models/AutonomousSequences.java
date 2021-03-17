@@ -348,7 +348,7 @@ public class AutonomousSequences {
                 double firstRotate = 20.8;
                 double secondRotate = -78.988;
                 IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false, 1);
-                Rotation2 firstRotation = new Rotation2(Math.cos(firstRotate*Math.PI/180), Math.sin(secondRotate*Math.PI/180), true);
+                Rotation2 firstRotation = new Rotation2(Math.cos(firstRotate*Math.PI/180), Math.sin(firstRotate*Math.PI/180), true);
                 Rotation2 secondRotation = new  Rotation2(Math.cos(secondRotate*Math.PI/180), Math.sin(secondRotate*Math.PI/180), true);
 
                 Path driveForward = new Path(Rotation2.ZERO);
@@ -356,7 +356,7 @@ public class AutonomousSequences {
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
                                 new Vector2(-29.0, 0.0)
-                        ), firstRotation
+                        )
                 );
                 
                 Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
@@ -368,8 +368,8 @@ public class AutonomousSequences {
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
                                 new Vector2(-78, 0.0)
-                        ), secondRotation
-                );
+                        ), firstRotation
+                ); // can add another segment to same path
                 
                 Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
                 AutonomousTrajectoryCommand driveToD5Command = new AutonomousTrajectoryCommand(driveToD5Trajectory);
@@ -380,7 +380,7 @@ public class AutonomousSequences {
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
                                 new Vector2(-105, 0.0)
-                        )
+                        ), secondRotation
                 );
                 
                 Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
@@ -389,10 +389,10 @@ public class AutonomousSequences {
                 output.addParallel(lowerIntake);
                 output.addParallel(driveForwardCommand);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
-                output.addSequential(rotateCommand, 2);
+                // output.addSequential(rotateCommand, 2);
                 output.addParallel(driveToD5Command);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
-                output.addSequential(rotateCommand2, 2);
+                // output.addSequential(rotateCommand2, 2);
                 output.addParallel(driveToA6Command);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(8));
 

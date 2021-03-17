@@ -214,6 +214,8 @@ private void initChooser() {
 //  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
  m_chooser.addOption("GoFetchTest", AutonomousSequences.GoFetchTest());
  m_chooser.addOption("Galactic-Search Blue A", AutonomousSequences.GalacticSearchBluePathA());
+ m_chooser.addOption("Galactic-Search Red A Rotate", AutonomousSequences.GalacticSearchRedPathARotate());
+
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 
