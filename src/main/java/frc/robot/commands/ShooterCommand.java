@@ -78,7 +78,8 @@ public class ShooterCommand extends Command {
                 motor1Adjust = 1 - Math.abs(motor1Adjust);
               }
               SmartDashboard.putNumber("motor1Adjust", motor1Adjust);
-              motor1Speed = 2500 - (315 * motor1Adjust);
+              motor1Speed = 2500 - (200 * motor1Adjust);
+              //motor1Speed = 1300 - (315 * motor1Adjust); //Low Port RPM
               SmartDashboard.putNumber("motor1Speed", motor1Speed);
               //motor1Speed now ranges between 1700 - 1900, depending on the throttle. 
          

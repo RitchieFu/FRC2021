@@ -3,7 +3,7 @@ import org.frcteam2910.common.control.PathLineSegment;
 import org.frcteam2910.common.math.Vector2;
 
 public class AutoNavMath {
-    private static final double RADIUS = 28;
+    private static final double RADIUS = 28; // in inches
 
     /*
     largerDeltaY is looking at the displacement from the center of the circle to either of the two tangent points. 
@@ -147,7 +147,7 @@ public class AutoNavMath {
         
     }
 
-    private static Vector2 convertPoint(String p) {
+    public static Vector2 convertPoint(String p) {
         int y = 150 - (p.charAt(0) - 'A') * 30; 
         int x = Integer.parseInt(p.substring(1, p.length() - 1)) * 30; 
         return new Vector2(x, y); 

@@ -209,13 +209,14 @@ private void initChooser() {
  m_chooser.addOption("Rotate 90 degrees", AutonomousSequences.RotateTest());
  m_chooser.addOption("Galactic-Search Red A", AutonomousSequences.GalacticSearchRedPathA());
 //  m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
-//  m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
+m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.PathLineTest());
 //  m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
 //  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
  m_chooser.addOption("GoFetchTest", AutonomousSequences.GoFetchTest());
  m_chooser.addOption("Galactic-Search Blue A", AutonomousSequences.GalacticSearchBluePathA());
  m_chooser.addOption("Galactic-Search Red A Rotate", AutonomousSequences.GalacticSearchRedPathARotate());
-
+ //m_chooser.addOption("Barrel path", AutonomousSequences.barrelRacing());
+ m_chooser.addOption("Arc test", AutonomousSequences.PathArcTest());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 
@@ -294,7 +295,7 @@ private void initChooser() {
      * autonomousCommand = new ExampleCommand(); break; }
      */
   
-
+    
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       autonomousCommand.start();
@@ -323,7 +324,7 @@ private void initChooser() {
       autonomousCommand.cancel();
     }
     // if(autoHappened){
-    //   reverseZeroCommand.start();
+       reverseZeroCommand.start();
     // }
     Robot.drivetrainSubsystem.getFollower().cancel();
 
@@ -331,7 +332,7 @@ private void initChooser() {
     
 
     subsystemManager.enableKinematicLoop(UPDATE_DT);
-    zeroCommand.start();
+   // zeroCommand.start();
    // SmartDashboard.putString("Path", PathSelecter.choosePath());
   }
 

@@ -35,7 +35,66 @@ public class AutonomousSequences {
                 
                 return output;
         }
+        public static CommandGroup PathArcTest() {
+                double radius = 50;
+                CommandGroup output = new CommandGroup();
+                Path arcPath = new Path(Rotation2.ZERO);
+                arcPath.addSegment(
+                        new PathArcSegment(
+                                new Vector2(0,0), 
+                                new Vector2(radius+radius*Math.sqrt(3)/2, radius/2), 
+                                new Vector2(radius,0)
+                                )
+                );
+                arcPath.addSegment(
+                        new PathArcSegment(
+                                new Vector2(radius+radius*Math.sqrt(3)/2, radius/2), 
+                                new Vector2(radius, -radius), 
+                                new Vector2(radius,0)
+                                )
+                );
+                arcPath.addSegment(
+                        new PathArcSegment(
+                                new Vector2(radius, -radius), 
+                                new Vector2(0,0), 
+                                new Vector2(radius,0)
+                                )
+                );
+                Trajectory arcTrajectory = new Trajectory(arcPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                AutonomousTrajectoryCommand arcCommand = new AutonomousTrajectoryCommand(arcTrajectory);
 
+                output.addSequential(arcCommand);
+                return output; 
+        }
+        public static CommandGroup PathLineTest() {
+                
+                CommandGroup output = new CommandGroup();
+                Path arcPath = new Path(Rotation2.ZERO);
+                arcPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0,0), 
+                                new Vector2(0, 25)
+                                )
+                );
+                arcPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0, 25), 
+                                new Vector2(0, -50) 
+                                )
+                );
+                arcPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0, -50), 
+                                new Vector2(0, 25) 
+                                )
+                );
+                Trajectory arcTrajectory = new Trajectory(arcPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                AutonomousTrajectoryCommand arcCommand = new AutonomousTrajectoryCommand(arcTrajectory);
+
+                output.addSequential(arcCommand);
+                return output; 
+        }
+        
         public static CommandGroup DriveLeftThenRight() {
                 CommandGroup output = new CommandGroup();
                 Path driveLeft = new Path(Rotation2.ZERO);
@@ -762,18 +821,22 @@ public class AutonomousSequences {
                 CommandGroup output = new CommandGroup();
                 Path barrelPath = new Path(Rotation2.ZERO);
                 // TODO: update values in Vector2's using tangent calculators
+
+                PathLineSegment E1toD2 = AutoNavMath.circlePointTangent("E1", "D2", false, false);
+                PathLineSegment D2toD4 = AutoNavMath.circleCircleInternalTangent("D2", "D4", false);
+
                 barrelPath.addSegment( // start to D2 arc
-                        AutoNavMath.circlePointTangent("E1", "D2", false, false)
+                        E1toD2
                 );
                 barrelPath.addSegment( // avoid D2 start zone cone
                         new PathArcSegment(
-                                new Vector2(0, 0), // start point
-                                new Vector2(0, 0), // end point
-                                new Vector2(0, 0) // center point
+                                E1toD2.getEnd(), // start point
+                                D2toD4.getStart(), // end point
+                                AutoNavMath.convertPoint("D2") // center point
                         )
                 );
                 barrelPath.addSegment( // D2 to B4
-                        AutoNavMath.circleCircleInternalTangent("D2", "D4", false)
+                        D2toD4
                 );
                 barrelPath.addSegment( // curve around D4
                         new PathArcSegment(

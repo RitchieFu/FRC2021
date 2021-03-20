@@ -21,7 +21,17 @@ public final class PathArcSegment extends PathSegment implements Serializable {
         this.deltaStart = start.subtract(center);
         this.deltaEnd = end.subtract(center);
 
-        clockwise = deltaStart.cross(deltaEnd) <= 0.0;
+        clockwise = deltaStart.cross(deltaEnd) > 0.0;
+    }
+
+    public PathArcSegment(Vector2 start, Vector2 end, Vector2 center, boolean clockwise) {
+        super(start, end);
+        this.center = center;
+        this.deltaStart = start.subtract(center);
+        this.deltaEnd = end.subtract(center);
+
+        //clockwise = deltaStart.cross(deltaEnd) <= 0.0;
+        this.clockwise = !clockwise;
     }
 
     /**
