@@ -209,7 +209,7 @@ private void initChooser() {
  m_chooser.addOption("Rotate 90 degrees", AutonomousSequences.RotateTest());
  m_chooser.addOption("Galactic-Search Red A", AutonomousSequences.GalacticSearchRedPathA());
 //  m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
-m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.PathLineTest());
+m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
 //  m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
 //  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
  m_chooser.addOption("GoFetchTest", AutonomousSequences.GoFetchTest());
@@ -217,6 +217,8 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.PathLineTest());
  m_chooser.addOption("Galactic-Search Red A Rotate", AutonomousSequences.GalacticSearchRedPathARotate());
  //m_chooser.addOption("Barrel path", AutonomousSequences.barrelRacing());
  m_chooser.addOption("Arc test", AutonomousSequences.PathArcTest());
+ m_chooser.addOption("Barrel Racing 2", AutonomousSequences.barrelRacing2());
+
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 

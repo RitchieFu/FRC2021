@@ -65,7 +65,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain {
         new CentripetalAccelerationConstraint(25.0 * 3.0)
   };
   
-  public static final ITrajectoryConstraint[] AUTONOMOUS_CONTRAINTS = {
+  public static final ITrajectoryConstraint[] AUTONOMOUS_CONSTRAINTS = {
     //Original
       //   new MaxVelocityConstraint(12.0 * 12.0),
       //   new MaxAccelerationConstraint(15.0 * 12.0),                                 

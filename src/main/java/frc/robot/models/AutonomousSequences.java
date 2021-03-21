@@ -60,7 +60,7 @@ public class AutonomousSequences {
                                 new Vector2(radius,0)
                                 )
                 );
-                Trajectory arcTrajectory = new Trajectory(arcPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory arcTrajectory = new Trajectory(arcPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand arcCommand = new AutonomousTrajectoryCommand(arcTrajectory);
 
                 output.addSequential(arcCommand);
@@ -88,7 +88,7 @@ public class AutonomousSequences {
                                 new Vector2(0, 25) 
                                 )
                 );
-                Trajectory arcTrajectory = new Trajectory(arcPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory arcTrajectory = new Trajectory(arcPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand arcCommand = new AutonomousTrajectoryCommand(arcTrajectory);
 
                 output.addSequential(arcCommand);
@@ -136,7 +136,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveforwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveforwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveforwardTrajectory);
 
                 Path driveBackward = new Path(Rotation2.ZERO);
@@ -147,7 +147,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory drivebackwardTrajectory = new Trajectory(driveBackward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory drivebackwardTrajectory = new Trajectory(driveBackward, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveBackwardCommand = new AutonomousTrajectoryCommand(drivebackwardTrajectory);
 
                 output.addSequential(driveForwardCommand);
@@ -298,7 +298,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
 
                 
@@ -310,7 +310,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveToD5Command = new AutonomousTrajectoryCommand(driveToD5Trajectory);
 
 
@@ -322,7 +322,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveToA6Command = new AutonomousTrajectoryCommand(driveToA6Trajectory);
 
                 output.addParallel(lowerIntake);
@@ -351,7 +351,7 @@ public class AutonomousSequences {
                                 new Vector2(-123.0, 0.0)
                         )
                 );
-                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
 
 
@@ -363,7 +363,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveToB7Trajectory = new Trajectory(driveToB7, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveToB7Trajectory = new Trajectory(driveToB7, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveToB7Command = new AutonomousTrajectoryCommand(driveToB7Trajectory);
 
                 Path driveToC9 = new Path(Rotation2.ZERO);
@@ -374,7 +374,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveToC9Trajectory = new Trajectory(driveToC9, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveToC9Trajectory = new Trajectory(driveToC9, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveToC9Command = new AutonomousTrajectoryCommand(driveToC9Trajectory);
 
                 // Path driveToEndzone = new Path(Rotation2.ZERO);
@@ -418,7 +418,7 @@ public class AutonomousSequences {
                         )
                 );
                 
-                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
 
                 
@@ -430,7 +430,7 @@ public class AutonomousSequences {
                         ), firstRotation
                 ); // can add another segment to same path
                 
-                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveToD5Trajectory = new Trajectory(driveToD5, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveToD5Command = new AutonomousTrajectoryCommand(driveToD5Trajectory);
 
 
@@ -442,7 +442,7 @@ public class AutonomousSequences {
                         ), secondRotation
                 );
                 
-                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
+                Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveToA6Command = new AutonomousTrajectoryCommand(driveToA6Trajectory);
 
                 output.addParallel(lowerIntake);
@@ -811,6 +811,103 @@ public class AutonomousSequences {
                 );
 
                 Trajectory barrelTrajectory = new Trajectory(barrelPath, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand barrelCommand = new AutonomousTrajectoryCommand(barrelTrajectory);
+                output.addSequential(barrelCommand); 
+
+                return output; 
+        }
+
+        public static CommandGroup barrelRacing2() {
+                CommandGroup output = new CommandGroup();
+                Path barrelPath = new Path(Rotation2.ZERO);
+                // TODO: update values in Vector2's using tangent calculators
+                // barrelPath.addSegment( // start zone to B5
+                //          new PathLineSegment(
+                //                  new Vector2(0,0),
+                //                  new Vector2(-90,0)
+                //          )
+                //  );
+                barrelPath.addSegment( // start zone to B5
+                        new PathLineSegment(
+                                new Vector2(0,0),
+                                new Vector2(-138.448,0)
+                        )
+                );
+                barrelPath.addSegment( // loop around D5
+                        new PathArcSegment(
+                                new Vector2(-138.448, 0), // start point
+                                new Vector2(-140, 58.665), // end point
+                                new Vector2(-114, 30) // center point
+                        )
+                );
+                barrelPath.addSegment( // loop around D5
+                        new PathArcSegment(
+                                new Vector2(-140, 58.665), // start point
+                                new Vector2(-90, 60.359), // end point
+                                new Vector2(-114, 30) // center point
+                        )
+                );
+                barrelPath.addSegment( // loop around D5
+                        new PathArcSegment(
+                                new Vector2(-90, 60.359), // start point
+                                new Vector2(-89.552, 0), // end point
+                                new Vector2(-114, 30) // center point
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathLineSegment(
+                                new Vector2(-89.552,0),
+                                new Vector2(-228.448,0)
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathArcSegment(
+                                new Vector2(-228.448,0), // start point
+                                new Vector2(-204, -68.7), // end point
+                                new Vector2(-204, -30) // center point
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathArcSegment(
+                                new Vector2(-204, -68.7), // start point
+                                new Vector2(-179.552, 0), // end point
+                                new Vector2(-204, -30) // center point
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathLineSegment(
+                                new Vector2(-179.552, 0),
+                                new Vector2(-245,63.664)
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathArcSegment(
+                                new Vector2(-245,63.664), // start point
+                                new Vector2(-313,52.329), // end point
+                                new Vector2(-276, 40) // center point
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathArcSegment(
+                                new Vector2(-313,52.329), // start point
+                                new Vector2(-300.92, 10), // end point
+                                new Vector2(-276, 40) // center point
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathLineSegment(
+                                new Vector2(-300.92, 10),
+                                new Vector2(0,10)
+                        )
+                );
+                barrelPath.addSegment( 
+                        new PathLineSegment(
+                                new Vector2(0, 10),
+                                new Vector2(5,10)
+                        )
+                );
+
+                Trajectory barrelTrajectory = new Trajectory(barrelPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS); // make new constraints for autonav
                 AutonomousTrajectoryCommand barrelCommand = new AutonomousTrajectoryCommand(barrelTrajectory);
                 output.addSequential(barrelCommand); 
 
