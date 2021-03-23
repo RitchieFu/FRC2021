@@ -2,6 +2,12 @@ package frc.robot.models;
 import org.frcteam2910.common.control.PathLineSegment;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+// IMPORTANT - Don't set the centers of the circles or points to have the same Y value
+// those are untested cases and the math may crash
+// the deltaYGreater check doesn't work for that case, so the bot may arbitraily pick the tangent line
+
 public class AutoNavMath {
     private static final double RADIUS = 28; // in inches
 
@@ -10,12 +16,14 @@ public class AutoNavMath {
     If the robot has to move to a higher Y-coord up, the displacement is positive, so largerDeltaY should be set as "true"
     */
 
-    public static PathLineSegment circleCircleExternalTangent(String circleString, String pointString, boolean largerDeltaY) {
-        Vector2 start = convertPoint(circleString); 
-        Vector2 end = convertPoint(pointString); 
+    public static PathLineSegment circleCircleExternalTangent(Vector2 circleString, Vector2 pointString, boolean largerDeltaY) {
+        // TODO determine if we want to pass in start/end points as strings or vectors
+        // update 3/22: made inputs vector2's instead of strings
+        Vector2 start = circleString; 
+        Vector2 end = pointString; 
 
-        System.out.println("start x, start y | end x, end y");
-		System.out.println(start.x + ", " + start.y + " | " + end.x + ", " + end.y);
+        // System.out.println("start x, start y | end x, end y");
+		// System.out.println(start.x + ", " + start.y + " | " + end.x + ", " + end.y);
 
 		double deltaY = end.y - start.y;
 		double deltaX = end.x - start.x;
@@ -41,7 +49,7 @@ public class AutoNavMath {
 		// y displacement = rcos(theta)
 		double displacementX = RADIUS * sinTheta; 
 		double displacementY = RADIUS * cosTheta; 
-		System.out.println("displacementX, displacementY = " + displacementX + ", " + displacementY);
+		// System.out.println("displacementX, displacementY = " + displacementX + ", " + displacementY);
 
 		// add reference triangle values to circle centers
         Vector2 startTan;
@@ -58,9 +66,11 @@ public class AutoNavMath {
 		return new PathLineSegment(startTan, endTan); 
     }
 
-    public static PathLineSegment circleCircleInternalTangent(String startString, String endString, boolean largerDeltaY) {
-        Vector2 start = convertPoint(startString);
-        Vector2 end = convertPoint(endString); 
+    public static PathLineSegment circleCircleInternalTangent(Vector2 startString, Vector2 endString, boolean largerDeltaY) {
+        // TODO determine if we want to pass in start/end points as strings or vectors
+        // update 3/22: made inputs vector2's instead of strings
+        Vector2 start = (startString);
+        Vector2 end = (endString); 
 
         double AA = start.x;
         double BB = start.y;
@@ -100,13 +110,17 @@ public class AutoNavMath {
         }
     }
 
-    public static PathLineSegment circlePointTangent(String circleString, String pointString, boolean largerDeltaY, boolean circleToPoint) {
+    public static PathLineSegment circlePointTangent(Vector2 circleString, Vector2 pointString, boolean largerDeltaY, boolean circleToPoint) {
         /*
         circleToPoint should be TRUE if the robot is STARTING from the CIRCLE
         should be FALSE if the robot is ENDING on the CIRCLE
         */
-        Vector2 circle = convertPoint(circleString); 
-        Vector2 point = convertPoint(pointString); 
+
+        // TODO determine if we want to pass in start/end points as strings or vectors
+        // update 3/22: made inputs vector2's instead of strings
+
+        Vector2 circle = (circleString); 
+        Vector2 point = (pointString); 
         
         double a = point.x - circle.x;
 		double b = point.y - circle.y; 
@@ -123,33 +137,71 @@ public class AutoNavMath {
 			t1X = t2X = r2 / a;
 			t1Y = RADIUS * Math.sqrt(1 - (r2 / a2));
 			t2Y = -RADIUS * Math.sqrt(1 - (r2 / a2));
-		} else {
-			t1X = (a * r2 - Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (a2 + b2);
-			t1Y = (b2 * r2 + a * Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (b * (a2 + b2));
+		} else { // all other cases
+			t1X = circle.x + (a * r2 - Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (a2 + b2);
+			t1Y = circle.y + (b2 * r2 + a * Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (b * (a2 + b2));
 
-			t2X = (a * r2 + Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (a2 + b2);
-			t2Y = (b2 * r2 - a * Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (b * (a2 + b2));
+			t2X = circle.x + (a * r2 + Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (a2 + b2);
+			t2Y = circle.y + (b2 * r2 - a * Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (b * (a2 + b2));
 		}
         
         Vector2 tanLine;
 
         if (largerDeltaY) {
-            tanLine = new Vector2(t1X, t1Y); 
+            tanLine = new Vector2(t1X, t1Y);
         } else {
             tanLine = new Vector2(t2X, t2Y);            
         }
+
+        System.out.println("largerDeltaY = " + largerDeltaY); 
+
+        System.out.println("TanLine = " + tanLine); 
 
         if (circleToPoint) {
             return new PathLineSegment(tanLine, point); 
         } else {
             return new PathLineSegment(point, tanLine); 
-        }        		
+        }       
         
     }
 
     public static Vector2 convertPoint(String p) {
-        int y = 150 - (p.charAt(0) - 'A') * 30; 
-        int x = Integer.parseInt(p.substring(1, p.length() - 1)) * 30; 
+        System.out.println("String:" + p);
+        if (p == null || p.equals("") || p.length() < 2) {
+            return new Vector2(-1,-1);
+        }
+
+        int y;
+        Integer x;     
+
+        try {
+            y = 150 - (p.charAt(0) - 'A') * 30; 
+            // int x = Integer.parseInt(p.substring(1, p.length() - 1)) * 30; 
+            String xStr = p.substring(1, p.length()-1);
+            System.out.println("xStr :" + xStr);
+            x = tryParseInt(p.substring(1, p.length() - 1)) * 30;
+        } catch (Exception e) { 
+            return new Vector2(-1, -1);
+        }
+        
+        
+        System.out.println("x coord = " + x);
+        System.out.println("y coord = " + y);
+
+        if (x == null) {
+            return new Vector2(-1,-1);
+        }    
+        
         return new Vector2(x, y); 
     } 
+
+    public static Integer tryParseInt(String p) {
+        Integer result = null; 
+        try {
+            result = Integer.parseInt(p); 
+        } catch (Exception e) {
+            System.out.println(p + " error parsing string");
+        }
+        return result; 
+    }
 }

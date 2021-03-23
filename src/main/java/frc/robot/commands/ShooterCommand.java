@@ -19,6 +19,7 @@ public class ShooterCommand extends Command {
   private boolean useCamera = false;
   private double targetDistance = 0;
   private double m_upperMotorSpeed = 0;
+  private double m_lowerMotorSpeed = 0;
   private boolean shootHigh = true;
 
   /**
@@ -43,8 +44,8 @@ public class ShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {    
-  
-    
+    // SmartDashboard.putNumber("motor1Speed", m_upperMotorSpeed);
+    // SmartDashboard.putNumber("motor2Speed", m_lowerMotorSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,34 +63,50 @@ public class ShooterCommand extends Command {
 
           targetDistance = Robot.vision.getXDistance();
           motor1Speed = computeShooterSpeedFromTargetDistance(targetDistance, shootHigh);
+          Robot.shooterSubsystem.SpinShooter(motor1Speed);
       } 
     } else {
 
         //For now, Only use throttle adjustments in high position.
         //If we want to use in low position we need to take measurements and calibrate.
         
-          double motor1Adjust = Robot.oi.rightStick.getRawAxis(2);
-          //Make no changes to motor speed unless the user has moved the throttle. 
-       
-              //Turn motor1Adjust into a range between 0 - 2.
-              if (motor1Adjust >= 0) {
-                motor1Adjust = 1 + motor1Adjust;
-              } else {
-                motor1Adjust = 1 - Math.abs(motor1Adjust);
-              }
-              SmartDashboard.putNumber("motor1Adjust", motor1Adjust);
-              motor1Speed = 2500 - (200 * motor1Adjust);
-              //motor1Speed = 1300 - (315 * motor1Adjust); //Low Port RPM
-              SmartDashboard.putNumber("motor1Speed", motor1Speed);
-              //motor1Speed now ranges between 1700 - 1900, depending on the throttle. 
-         
-
-
+        executeWithSmartDashboard();
+        //executeWithThrottles(motor1Speed);
 
     }
 
+    // yellow zone: upper motor - 1750, lower motor - 1300 (raised shooter)
+    // blue zone: upper motor - 2200, lower motor - 1600 (lowered shooter)
+    // red zone: upper motor - 2200, lower motor - 1700 (lowered shooter)
 
-     Robot.shooterSubsystem.SpinShooter(motor1Speed);
+
+  }
+
+  private void executeWithSmartDashboard() {
+    m_upperMotorSpeed = SmartDashboard.getNumber("motor1Speed", m_upperMotorSpeed);
+    m_lowerMotorSpeed = SmartDashboard.getNumber("motor2Speed", m_lowerMotorSpeed);
+    
+    Robot.shooterSubsystem.SpinShooter(m_upperMotorSpeed, m_lowerMotorSpeed);
+  }
+
+  private void executeWithThrottles(double motor1Speed)
+  {
+    double motor1Adjust = Robot.oi.rightStick.getRawAxis(2);
+    //Make no changes to motor speed unless the user has moved the throttle. 
+ 
+        //Turn motor1Adjust into a range between 0 - 2.
+        if (motor1Adjust >= 0) {
+          motor1Adjust = 1 + motor1Adjust;
+        } else {
+          motor1Adjust = 1 - Math.abs(motor1Adjust);
+        }
+        SmartDashboard.putNumber("motor1Adjust", motor1Adjust);
+        motor1Speed = 2500 - (200 * motor1Adjust);
+        //motor1Speed = 1300 - (315 * motor1Adjust); //Low Port RPM
+        SmartDashboard.putNumber("motor1Speed", motor1Speed);
+        //motor1Speed now ranges between 1700 - 1900, depending on the throttle. 
+        Robot.shooterSubsystem.SpinShooter(motor1Speed);
+
   }
 
   public double computeShooterSpeedFromTargetDistance(double targetDistance, boolean isShooterHigh) {

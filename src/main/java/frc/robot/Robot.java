@@ -217,6 +217,7 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
  m_chooser.addOption("Galactic-Search Red A Rotate", AutonomousSequences.GalacticSearchRedPathARotate());
  //m_chooser.addOption("Barrel path", AutonomousSequences.barrelRacing());
  m_chooser.addOption("Arc test", AutonomousSequences.PathArcTest());
+ m_chooser.addOption("Barrel Racing 1", AutonomousSequences.barrelRacing());
  m_chooser.addOption("Barrel Racing 2", AutonomousSequences.barrelRacing2());
 
   SmartDashboard.putData("Auto mode", m_chooser);
