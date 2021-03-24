@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.frcteam2910.common.control.HolonomicMotionProfiledTrajectoryFollower;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.control.Trajectory.Segment;
+import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.util.HolonomicDriveSignal;
 import org.frcteam2910.common.util.Side;
@@ -24,6 +25,7 @@ public class AutonomousTrajectoryCommand extends Command {
 
     Trajectory autonomousTrajectory;
     PIDController angleController;
+    private double intialRobotOrientation = 0;
     
     public AutonomousTrajectoryCommand(Trajectory trajectory) {
         super(trajectory.getDuration());
@@ -34,13 +36,23 @@ public class AutonomousTrajectoryCommand extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
+
+    public AutonomousTrajectoryCommand(Trajectory trajectory, double orientation) {
+        super(trajectory.getDuration());
+        requires(Robot.drivetrainSubsystem);
+        this.intialRobotOrientation = orientation;
+        autonomousTrajectory = trajectory;
+        angleController = new PIDController(0.01, 0.01, 0);
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    }
 	
     // Called just before this Command runs the first time
     protected void initialize() {
         //FHE: Enable the following line to for drive/rotate/drive test
-        Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle());
-    
-
+         Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle());
+     
+        //Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Rotation2.fromDegrees(intialRobotOrientation + Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle().toDegrees()));
 
         //autonomousTrajectory.calculateSegments(5/1000);
 

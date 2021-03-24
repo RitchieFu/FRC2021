@@ -126,13 +126,17 @@ public class AutonomousSequences {
         }
 
         public static CommandGroup DriveStraightForwardAndBack() {
+
+
+              // Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Rotation2.fromDegrees(90 + Robot.drivetrainSubsystem.getGyroscope().getUnadjustedAngle().toDegrees()));
+
                 CommandGroup output = new CommandGroup();
 
                 Path driveForward = new Path(Rotation2.ZERO);
                 driveForward.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(-180, 0.0)
+                                new Vector2(-90, 0.0)
                         )
                 );
                 
@@ -143,7 +147,7 @@ public class AutonomousSequences {
                 driveBackward.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(180, 0.0)
+                                new Vector2(90, 0.0)
                         )
                 );
                 
@@ -776,7 +780,7 @@ public class AutonomousSequences {
                 CommandGroup output = new CommandGroup();
                 Path barrelPath = new Path(Rotation2.ZERO);
                 // TODO UPDATE 3/22 use following addSegment to test AutoNavMath functions
-                PathLineSegment segment = AutoNavMath.circlePointTangent(new Vector2(-80, -28), new Vector2(0,0), true, false);
+                PathLineSegment segment = AutoNavMath.circlePointTangent(new Vector2(-80, -28), new Vector2(0,0), true, false, 28);
                 System.out.println("Start: " + segment.getStart() + " End: " + segment.getEnd());
                 barrelPath.addSegment( // start zone to B5 
                         segment
@@ -999,69 +1003,149 @@ public class AutonomousSequences {
         public static CommandGroup bounce() {
                 CommandGroup output = new CommandGroup();
                 Path barrelPath = new Path(Rotation2.ZERO);
-                // // TODO: update values in Vector2's using tangent calculators
-                // barrelPath.addSegment( // start to D2 arc
-                //         AutoNavMath.circlePointTangent("C1", "D2", false, false)
-                // );
-                // barrelPath.addSegment( // avoid B2 start zone cone
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment( // straight line to A3
-                //        AutoNavMath.circlePointTangent("B2", "A3", false, true)
-                // );
-                // barrelPath.addSegment(// straight line to B4
-                //         AutoNavMath.circlePointTangent("A3", "B4", false, false)
+                // TODO: update values in Vector2's using tangent calculators
+                /*
+                Field to robot coordinates:
+                https://www.desmos.com/calculator/reunlnhdlc
+                */
+                //Robot.drivetrainSubsystem.getGyroscope().setAdjustmentAngle(Rotation2.fromDegrees(90 + drivetrain.getGyroscope().getUnadjustedAngle().toDegrees()));
+
+                double robotYOffset = -4; //-5.625; // so that center of the bot is lined up with front of start zone
+
+                Vector2 start = new Vector2(0, 0); // robot start position with front bumper lined up at the edge of start zone 
+                Vector2 B2 = new Vector2((-24 + robotYOffset), -30);
+                PathLineSegment startToB2Line = AutoNavMath.circlePointTangent(B2, start, true, false, 28);
+                // start to B2 
+                barrelPath.addSegment( 
+                        startToB2Line
+                );
+                
+                // avoid B2 start zone cone
+                Vector2 A3 = new Vector2((-(90-36) + robotYOffset), -(150-90)); 
+                // determine the PathLineSegment that goes after the arc so we can use its start Vector2 field as the end point of the arc
+                PathLineSegment B2toA3Line = AutoNavMath.circlePointTangent(B2, A3, true, true, 28);
+                barrelPath.addSegment( 
+                        new PathArcSegment(
+                                startToB2Line.getEnd(), // start point
+                                B2toA3Line.getStart(), // end point
+                                B2 // center point
+                        ) //, new Rotation2(0, 0, true) // spin the robot as it loops around
+                );
+                
+                
+                barrelPath.addSegment( // straight line to A3
+                       B2toA3Line
+                );
+
+                // straight line to B4
+                // Vector2 B4 = new Vector2(-(120 - 36) + robotYOffset, -(120 - 90));
+                // PathLineSegment A3toB4Line = AutoNavMath.circlePointTangent(B4, A3, false, false, 28);
+                // barrelPath.addSegment(
+                //         A3toB4Line
                 // ); 
-                // barrelPath.addSegment( // curve around B4
+
+                // curve around B4
+                Vector2 D5 = new Vector2(-(150-36) + robotYOffset, -(60-90));
+                // PathLineSegment B4toD5Line = AutoNavMath.circleCircleExternalTangent(B4, D5, false);
+                // barrelPath.addSegment( 
                 //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
+                //                 A3toB4Line.getEnd(), // start point
+                //                 B4toD5Line.getStart(), // end point
+                //                 B4 // center point
+                //         ) // , new Rotation2(0, 0, true) // spin the robot as it loops around
                 // );
-                // barrelPath.addSegment( // straight line to D5
-                //         AutoNavMath.circleCircleExternalTangent("B4", "D5", false)
+
+                Vector2 B4prime = new Vector2(-(105 - 36) + robotYOffset, -(50 - 90));
+
+                // straight line to D5
+                // ***FROM A3 TO D5
+                // PathLineSegment A3toD5Line = AutoNavMath.circlePointTangent(D5, A3, false, false, 40); 
+                // barrelPath.addSegment( 
+                //        A3toD5Line
                 // );
-                // barrelPath.addSegment( // loop around D5
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment( // straight line to A6
-                //         AutoNavMath.circlePointTangent("D5", "A6", false, true)
-                // );
-                // barrelPath.addSegment( // straight line to D7
-                //         AutoNavMath.circlePointTangent("A6", "D7", false, false)
-                // );
-                // barrelPath.addSegment( // loop around D7
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment( // straight line to D8
-                //         AutoNavMath.circleCircleExternalTangent("D7", "D8", false)
-                // );
-                // barrelPath.addSegment( // loop around D8
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment(
-                //         AutoNavMath.circlePointTangent("D8", "A9", false, true)
-                // );
-                // barrelPath.addSegment(
-                //         AutoNavMath.circlePointTangent("A9", "B10", false, false)
-                // );
+                // ***FROM A3 TO D5 IN TWO STRAIGHT LINE SEGMENTS
+                PathLineSegment A3toB4primeLine = new PathLineSegment(A3, B4prime);
+                PathLineSegment B4primetoD5Line = AutoNavMath.circlePointTangent(D5, B4prime, true, false, 28);
+                System.out.println("Tan line from B4'-D5 = " + B4primetoD5Line); 
+                                 
+                // Tan line from B4'-D5 = {start: (-78.000, 40.000), end: (-94.568, 14.672)}
+
+                barrelPath.addSegment(A3toB4primeLine);
+                barrelPath.addSegment(B4primetoD5Line); 
+
+                // loop around D5
+                Vector2 A6 = new Vector2(-(180-36) + robotYOffset, -(150-90));
+                PathLineSegment D5toA6Line = AutoNavMath.circlePointTangent(D5, A6, true, true, 28);
+                PathArcSegment loopAroundD5 = new PathArcSegment(
+                                B4primetoD5Line.getEnd(), // start point
+                                D5toA6Line.getStart(), // end point
+                                D5 // center point
+                        );
+                barrelPath.addSegment( 
+                        loopAroundD5
+                );
+                System.out.println("Start and end for the arc set by the tan lines B4'-D5 and D5-A = " + loopAroundD5);
+                System.out.println("Tangent line from circle centered at D5 to point A6 = " + D5toA6Line.toString());
+                
+                barrelPath.addSegment( 
+                        D5toA6Line
+                );
+                
+                // straight line to D7
+                Vector2 D7 = new Vector2(-(210-36) + robotYOffset, -(60-90));
+                PathLineSegment A6toD7Line = AutoNavMath.circlePointTangent(D7, A6, false, false, 28);
+                barrelPath.addSegment( 
+                        A6toD7Line
+                );          
+                
+                
+                Vector2 D8 = new Vector2(-(240-36) + robotYOffset, -(60-90));
+                Vector2 A9 = new Vector2(-(270-36) + robotYOffset, -(150-90));
+                // haven't added B10 or C11 coordinates 
+
+                PathLineSegment D7toD8Line = AutoNavMath.circleCircleExternalTangent(D7, D8, false);
+
+                // loop around D7
+                barrelPath.addSegment( 
+                        new PathArcSegment(
+                                A6toD7Line.getEnd(), // start point
+                                D7toD8Line.getStart(), // end point
+                                D7 // center point
+                        ) // , new Rotation2(0, 0, true) // spin the robot as it loops around
+                );
+
+                // straight line to D8
+                barrelPath.addSegment( 
+                        AutoNavMath.circleCircleExternalTangent(D7, D8, false)
+                );
+                
+                // loop around D8
+                PathLineSegment D8toA9Line = AutoNavMath.circlePointTangent(D8, A9, false, true, 28);
+                barrelPath.addSegment( 
+                        new PathArcSegment(
+                                D7toD8Line.getEnd(), // start point
+                                D8toA9Line.getStart(), // end point
+                                D8 // center point
+                        ) // , new Rotation2(0, 0, true) // spin the robot as it loops around
+                );
+
+                // drive straight to A9
+                barrelPath.addSegment(
+                        D8toA9Line
+                );
+
+                // drive to circle centered at B10
+                Vector2 B10 = new Vector2(-(300 - 36) + robotYOffset, -(120 - 90));
+                Vector2 end = new Vector2(-(330 - 35) + robotYOffset, -(90 - 90));
+                
+                barrelPath.addSegment(
+                        new PathLineSegment(A9, B10)
+                );
+
+                barrelPath.addSegment(
+                        new PathLineSegment(B10, end)
+                );
+
                 // barrelPath.addSegment( // loop around B10
                 //         new PathArcSegment(
                 //                 new Vector2(0, 0), // start point
@@ -1071,17 +1155,169 @@ public class AutonomousSequences {
                 // ); 
                 // // TODO see if it's possible to drive straight into finish zone and break the plane without looping around B10 (similar to slalom ending)
                 // barrelPath.addSegment(
-                //         AutoNavMath.circlePointTangent("B10", "C11", false, true)
+                //         AutoNavMath.circlePointTangent(B10, C11, false, true, 28)
                 // );
 
-                // Trajectory barrelTrajectory = new Trajectory(barrelPath, Robot.drivetrainSubsystem.CONSTRAINTS);
-                // AutonomousTrajectoryCommand barrelCommand = new AutonomousTrajectoryCommand(barrelTrajectory);
-                // output.addSequential(barrelCommand); 
+                // arbitrary line segment that caps the sequence
+                barrelPath.addSegment( // straight line to A3
+                       new PathLineSegment(
+                               B2toA3Line.getEnd(),
+                               new Vector2(B2toA3Line.getEnd().x - 1, B2toA3Line.getEnd().y - 1)
+                       )
+                ); 
+
+                Trajectory barrelTrajectory = new Trajectory(barrelPath, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand barrelCommand = new AutonomousTrajectoryCommand(barrelTrajectory);
+                output.addSequential(barrelCommand); 
 
                 return output; 
         }
+        
+        public static CommandGroup bounce2() {
+                CommandGroup output = new CommandGroup();
+                Path barrelPath = new Path(Rotation2.ZERO);
+        
+                        barrelPath.addSegment(
+                                new PathLineSegment(
+                                        new Vector2(0,0),
+                                        new Vector2(-36,0)
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathArcSegment(
+                                        new Vector2(-36, 0), // start point
+                                        new Vector2(-44, -30), // end point
+                                        new Vector2(0, -30) // center point
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-44, -30), // start point
+                                        new Vector2(-54, -60) // end point
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-54, -60), // start point
+                                        new Vector2(-54, 0) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-54, 0), // start point
+                                        new Vector2(-84, 0) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-84, 0), // start point
+                                        new Vector2(-84, 70) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-84, 70), // start point
+                                        new Vector2(-144, 70) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-144, 70), // start point
+                                        new Vector2(-144, -60) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-144, -60), // start point
+                                        new Vector2(-144, 70) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-144, 70), // start point
+                                        new Vector2(-234, 70) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-234, 70), // start point
+                                        new Vector2(-234, -60) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-234, -60), // start point
+                                        new Vector2(-234, 20) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-234, 20), // start point
+                                        new Vector2(-270, 20) // end point   
+                                )
+                        );
+                        barrelPath.addSegment( // loop around D5
+                                new PathLineSegment(
+                                        new Vector2(-270, 20), // start point
+                                        new Vector2(-260, 20) // end point   
+                                )
+                        );
 
-
+                        
+                        // barrelPath.addSegment( 
+                        //         new PathArcSegment(
+                        //                 new Vector2(-89, 30),
+                        //                 new Vector2(-114,55),
+                        //                 new Vector2(-114,30)
+                        //         )
+                        // );
+                        // barrelPath.addSegment( 
+                        //         new PathArcSegment(
+                        //                 new Vector2(-114,55), // start point
+                        //                 new Vector2(-139,30), // end point
+                        //                 new Vector2(-114,30) // center point
+                        //         )
+                        // );
+                        // barrelPath.addSegment( 
+                        //         new PathLineSegment(
+                        //                 new Vector2(-139, 30), // start point
+                        //                 new Vector2(-144, -60) // end point
+                        //         )       
+                        // );
+                        // barrelPath.addSegment( 
+                        //         new PathLineSegment(
+                        //                 new Vector2(-144, -60),
+                        //                 new Vector2(-160,43.775)
+                        //         )
+                        // );
+                        // barrelPath.addSegment( 
+                        //         new PathArcSegment(
+                        //                 new Vector2(-160,43.775), // start point
+                        //                 new Vector2(-229,30), // end point
+                        //                 new Vector2(-189,30) // center point
+                        //         )
+                        // );
+                    
+                        // barrelPath.addSegment( 
+                        //         new PathLineSegment(
+                        //                 new Vector2(-229,30),
+                        //                 new Vector2(-234,-60)
+                        //         )
+                        // );
+                        // barrelPath.addSegment( 
+                        //         new PathLineSegment(
+                        //                 new Vector2(-234,-60),
+                        //                 new Vector2(-240, -70)
+                        //         )
+                        // );
+        
+                        Trajectory barrelTrajectory = new Trajectory(barrelPath, Robot.drivetrainSubsystem.CONSTRAINTS); // make new constraints for autonav
+                        AutonomousTrajectoryCommand barrelCommand = new AutonomousTrajectoryCommand(barrelTrajectory);
+                        output.addSequential(barrelCommand); 
+        
+                        return output; 	
+        }
+        
        
     //Lifts intake
     //Drives forward 5 inches

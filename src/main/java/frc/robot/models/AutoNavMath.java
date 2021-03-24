@@ -16,11 +16,11 @@ public class AutoNavMath {
     If the robot has to move to a higher Y-coord up, the displacement is positive, so largerDeltaY should be set as "true"
     */
 
-    public static PathLineSegment circleCircleExternalTangent(Vector2 circleString, Vector2 pointString, boolean largerDeltaY) {
+    public static PathLineSegment circleCircleExternalTangent(Vector2 circleStart, Vector2 circleEnd, boolean largerDeltaY) {
         // TODO determine if we want to pass in start/end points as strings or vectors
         // update 3/22: made inputs vector2's instead of strings
-        Vector2 start = circleString; 
-        Vector2 end = pointString; 
+        Vector2 start = circleStart; 
+        Vector2 end = circleEnd; 
 
         // System.out.println("start x, start y | end x, end y");
 		// System.out.println(start.x + ", " + start.y + " | " + end.x + ", " + end.y);
@@ -110,7 +110,7 @@ public class AutoNavMath {
         }
     }
 
-    public static PathLineSegment circlePointTangent(Vector2 circleString, Vector2 pointString, boolean largerDeltaY, boolean circleToPoint) {
+    public static PathLineSegment circlePointTangent(Vector2 circleString, Vector2 pointString, boolean largerDeltaY, boolean circleToPoint, double radius) {
         /*
         circleToPoint should be TRUE if the robot is STARTING from the CIRCLE
         should be FALSE if the robot is ENDING on the CIRCLE
@@ -126,7 +126,8 @@ public class AutoNavMath {
 		double b = point.y - circle.y; 
 		double a2 = a * a;
 		double b2 = b * b;
-		double r2 = RADIUS * RADIUS; 
+        double r = radius;
+		double r2 = radius * radius; 
 		double t1X;
 		double t1Y;
 		double t2X;
@@ -135,8 +136,8 @@ public class AutoNavMath {
         
 		if (b == 0) { // case where start and end point have same y value
 			t1X = t2X = r2 / a;
-			t1Y = RADIUS * Math.sqrt(1 - (r2 / a2));
-			t2Y = -RADIUS * Math.sqrt(1 - (r2 / a2));
+			t1Y = r * Math.sqrt(1 - (r2 / a2));
+			t2Y = -r * Math.sqrt(1 - (r2 / a2));
 		} else { // all other cases
 			t1X = circle.x + (a * r2 - Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (a2 + b2);
 			t1Y = circle.y + (b2 * r2 + a * Math.sqrt(b2 * r2 * (a2 + b2 - r2))) / (b * (a2 + b2));
