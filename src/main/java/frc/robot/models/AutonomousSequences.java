@@ -101,7 +101,7 @@ public class AutonomousSequences {
                 driveLeft.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2( 0.0, -120)
+                                new Vector2( 0.0, -90)
                         )
                 );
                 
@@ -112,7 +112,7 @@ public class AutonomousSequences {
                 driveRight.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2( 0.0, 120)
+                                new Vector2( 0.0, 90)
                         )
                 );
                 
@@ -136,7 +136,7 @@ public class AutonomousSequences {
                 driveForward.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(-90, 0.0)
+                                new Vector2(-180, 0.0)
                         )
                 );
                 
@@ -147,7 +147,7 @@ public class AutonomousSequences {
                 driveBackward.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(90, 0.0)
+                                new Vector2(180, 0.0)
                         )
                 );
                 
@@ -923,83 +923,243 @@ public class AutonomousSequences {
 
         public static CommandGroup slalom() {
                 CommandGroup output = new CommandGroup();
-                Path barrelPath = new Path(Rotation2.ZERO);
+                Path slalomPath = new Path(Rotation2.ZERO);
                 // TODO: update values in Vector2's using tangent calculators
+                /*
+                ***HOW ROBOT COORDS ARE DETERMINED***
+                X: sutract 36 from field coord and negate it 
+                Y: subtract 90 from field coord and negate it 
+                */
+                double yValue = -(60 - 30); // in robot coords
+                
+                Vector2 start = new Vector2(0, 0);
+                Vector2 D2 = new Vector2(-(60 - 36), yValue);
+                Vector2 D4 = new Vector2(-(120 - 36), yValue);
+                Vector2 D8 = new Vector2(-(240 - 36), yValue);
+                Vector2 D10 = new Vector2(-(300 - 36), yValue);
+                
+                PathLineSegment startToD2 = AutoNavMath.circlePointTangent(D2, start, true, false, 35);
+                slalomPath.addSegment(startToD2);
 
-                // PathLineSegment E1toD2 = AutoNavMath.circlePointTangent("E1", "D2", false, false);
-                // PathLineSegment D2toD4 = AutoNavMath.circleCircleInternalTangent("D2", "D4", false);
+                PathLineSegment D2toD4 = AutoNavMath.circleCircleInternalTangent(D2, D4, true);
 
-                // barrelPath.addSegment( // start to D2 arc
-                //         E1toD2
-                // );
-                // barrelPath.addSegment( // avoid D2 start zone cone
-                //         new PathArcSegment(
-                //                 E1toD2.getEnd(), // start point
-                //                 D2toD4.getStart(), // end point
-                //                 AutoNavMath.convertPoint("D2") // center point
-                //         )
-                // );
-                // barrelPath.addSegment( // D2 to B4
-                //         D2toD4
-                // );
-                // barrelPath.addSegment( // curve around D4
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment( // straight line to D8
-                //         AutoNavMath.circleCircleExternalTangent("D4", "D8", true)
-                // );
-                // barrelPath.addSegment( // curve around D8
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment( // straight line to D10
-                //         AutoNavMath.circleCircleInternalTangent("D8", "D10", false)
-                // );
-                // barrelPath.addSegment( // loop around D10
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment( // straight line to D8
-                //         AutoNavMath.circleCircleInternalTangent("D10", "D8", true)
-                // );
-                // barrelPath.addSegment( // curve around D8
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment(
-                //         AutoNavMath.circleCircleExternalTangent("D8", "D4", false)
-                // );
-                // barrelPath.addSegment( // curve around D4
-                //         new PathArcSegment(
-                //                 new Vector2(0, 0), // start point
-                //                 new Vector2(0, 0), // end point
-                //                 new Vector2(0, 0) // center point
-                //         ), new Rotation2(0, 0, true) // spin the robot as it loops around
-                // );
-                // barrelPath.addSegment(
-                //         AutoNavMath.circlePointTangent("D4", "C1", false, true)
-                // );
+                // curve around D2
+                slalomPath.addSegment(
+                        new PathArcSegment(
+                                startToD2.getEnd(),
+                                D2toD4.getStart(),
+                                D2
+                        )
+                );
+                
 
-                // Trajectory barrelTrajectory = new Trajectory(barrelPath, Robot.drivetrainSubsystem.CONSTRAINTS);
-                // AutonomousTrajectoryCommand barrelCommand = new AutonomousTrajectoryCommand(barrelTrajectory);
-                // output.addSequential(barrelCommand); 
+                // straight line diagonal to D4
+                slalomPath.addSegment(D2toD4);
+
+
+                // curve around D4 
+                PathLineSegment D4toD8 = AutoNavMath.circleCircleExternalTangent(D4, D8, false); // need deltaYLarger = false
+
+                slalomPath.addSegment(
+                        new PathArcSegment(
+                                D2toD4.getEnd(),
+                                D4toD8.getStart(),
+                                D4
+                        )
+                );
+
+
+                slalomPath.addSegment(D4toD8);
+
+                // ***THIS BLOCK IS THROWING A MAX VELOCITY EXCEPTION********************
+                
+                Vector2 dummyEnd = new Vector2(D4toD8.getStart().x - 20, D4toD8.getStart().y - 20);
+                PathLineSegment dummyClosingPath = new PathLineSegment(D8, dummyEnd);
+                slalomPath.addSegment(dummyClosingPath);
+                System.out.println("D8 start for dummy closing segment = " + D8.toString());
+                System.out.println("Ending vector for dummy closing segment = " + dummyEnd.toString());
+                System.out.println("Overall segment path = " + dummyClosingPath);
+  
+                // **********************************************************************
+
+                /*
+                PathLineSegment D8toD10 = AutoNavMath.circleCircleInternalTangent(D8, D10, false); // maybe should be true?
+                
+                // curve around D8
+                slalomPath.addSegment(
+                        new PathArcSegment(
+                                D4toD8.getEnd(),
+                                D8toD10.getStart(),
+                                D8
+                        )
+                )
+                
+                // go to D10
+                slalomPath.addSegment(D8toD10);
+
+                PathLineSegment D10toD8 = AutoNavMath.circleCircleInternalTangent(D10, D8, true); // check largerDeltaY again
+
+                // loop around D10
+                slalomPath.addSegment(
+                        new PathArcSegment(
+                                D8toD10.getEnd(),
+                                D10toD8.getStart(),
+                                D10
+                        )
+                )
+
+                // go to D8 again
+                slalomPath.addSegment(D10toD8);
+
+                // curve around D8
+                PathLineSegment D8toD4 = AutoNavMath.circleCircleExternalTangent(D8, D4, false); // check largerDeltaY
+
+                slalomPath.addSegment(
+                        new PathArcSegment(
+                                D10toD8.getEnd(),
+                                D8toD4.getStart(),
+                                D8
+                        )
+                )
+
+                // go to D4
+                slalomPath.addSegment(D8toD4);
+
+                // curve around D4
+                Vector2 end = new Vector2(-(90 - 36), -(40 - 30));
+                PathLineSegment D4toEnd = AutoNavMath.circlePointToTangent(D4, end, false, true, 28);
+                slalomPath.addSegment(
+                        new PathArcSegment(
+                                D8toD4.getEnd(),
+                                D4toEnd.getStart(),
+                                D4
+                        )
+                )
+
+                // go to end
+                slalomPath.addSegment(D4toEnd); 
+
+                slalomPath.addSegment(D4toEnd.getEnd().x + 1, D4toEnd.getEnd.y + 1); 
+                */
+                
+
+                Trajectory slalomTrajectory = new Trajectory(slalomPath, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand slalomCommand = new AutonomousTrajectoryCommand(slalomTrajectory);
+                output.addSequential(slalomCommand); 
 
                 return output; 
         }
 
+        
+        public static CommandGroup slalom2() {
+
+                CommandGroup output = new CommandGroup();
+                Path slalomPath = new Path(Rotation2.ZERO);
+
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0,0),
+                                new Vector2(-24, 0)
+                        )
+                ); // drive forward
+
+                slalomPath.addSegment( // arc around D2
+                        new PathArcSegment(
+                                new Vector2(-24, 0),
+                                new Vector2(-52, -28), 
+                                new Vector2(-24, -28) 
+                        )
+                );
+                
+                slalomPath.addSegment( // arc around D4
+                        new PathArcSegment(
+                                new Vector2(-52, -28),
+                                new Vector2(-63.581, -60), 
+                                new Vector2(-102, -28) 
+                        )
+                );
+
+                slalomPath.addSegment( // drive to D8 tangent
+                        new PathLineSegment(
+                                new Vector2(-63.581, -60),
+                                new Vector2(-234, -60)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-234, -60),
+                                new Vector2(-234, 0)
+                        )
+                ); 
+                
+                slalomPath.addSegment( // drive to end of field arc
+                        new PathLineSegment(
+                                new Vector2(-234, 0),
+                                new Vector2(-252, 0)
+                        )
+                ); 
+
+                slalomPath.addSegment( // arc around D4
+                        new PathArcSegment(
+                                new Vector2(-252, 0),
+                                new Vector2(-300, -48), 
+                                new Vector2(-270, -30) 
+                        )
+                );
+
+                slalomPath.addSegment( // arc around D4
+                        new PathArcSegment(
+                                new Vector2(-300, -48),
+                                new Vector2(-235, -28), 
+                                new Vector2(-270, -30) 
+                        )
+                );
+
+                slalomPath.addSegment( // end of arc and drives straight
+                        new PathLineSegment(
+                                new Vector2(-235, -28),
+                                new Vector2(-235, 5)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-235, 5),
+                                new Vector2(-42, 5)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-42, 5),
+                                new Vector2(-42, -60)
+                        )
+                ); 
+                
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-42, -60),
+                                new Vector2(0, -60)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0, -60),
+                                new Vector2(5, -60)
+                        )
+                ); 
+
+
+                
+                Trajectory slalomTrajectory = new Trajectory(slalomPath, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand slalomCommand = new AutonomousTrajectoryCommand(slalomTrajectory);
+                output.addSequential(slalomCommand); 
+
+                return output;
+        }
         public static CommandGroup bounce() {
                 CommandGroup output = new CommandGroup();
                 Path barrelPath = new Path(Rotation2.ZERO);

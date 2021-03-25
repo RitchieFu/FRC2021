@@ -210,7 +210,7 @@ private void initChooser() {
  m_chooser.addOption("Galactic-Search Red A", AutonomousSequences.GalacticSearchRedPathA());
 //  m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
 m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
-//  m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
+ m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
 //  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
  m_chooser.addOption("GoFetchTest", AutonomousSequences.GoFetchTest());
  m_chooser.addOption("Galactic-Search Blue A", AutonomousSequences.GalacticSearchBluePathA());
@@ -221,6 +221,8 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
  m_chooser.addOption("Barrel Racing 2", AutonomousSequences.barrelRacing2());
  m_chooser.addOption("Bounce Path", AutonomousSequences.bounce());
  m_chooser.addOption("Bounce2 path", AutonomousSequences.bounce2());
+//  m_chooser.addOption("Slalom Path", AutonomousSequences.slalom());
+ m_chooser.addOption("Slalom2 Path", AutonomousSequences.slalom2());
   SmartDashboard.putData("Auto mode", m_chooser);
 }
 

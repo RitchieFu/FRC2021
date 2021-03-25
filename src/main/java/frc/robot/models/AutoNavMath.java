@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // the deltaYGreater check doesn't work for that case, so the bot may arbitraily pick the tangent line
 
 public class AutoNavMath {
-    private static final double RADIUS = 28; // in inches
+    private static final double RADIUS = 35; // in inches
 
     /*
     largerDeltaY is looking at the displacement from the center of the circle to either of the two tangent points. 
