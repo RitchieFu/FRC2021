@@ -72,7 +72,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain {
       //   new CentripetalAccelerationConstraint(25.0 * 12.0)
       
       new MaxVelocityConstraint(12.0 * 5.0),
-      new MaxAccelerationConstraint(15.0 * 2.0),                                  
+      new MaxAccelerationConstraint(15.0 * 3.0),                                  
       new CentripetalAccelerationConstraint(25.0 * 3.0)
 };
   
@@ -117,11 +117,11 @@ public class DrivetrainSubsystem extends SwerveDrivetrain {
 //NEGATE SMARTDASHBOARD VALUES IN OFFSEST
 //COMP BOT
 private static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-29.9); //95.7
-private static final double BACK_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-138.8); //-148 + 180   -326.8
+private static final double BACK_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-145.8+5); //-148 + 180   -326.8
 //private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-173.1); //14
 //private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-131.5); //14
 //private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-12.5); //14
-private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(48.5 + 47); //14
+private static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(48.5 + 45); //14
 private static final double FRONT_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-24.5); //-336+180    -151.6
 
   private static final PidConstants FOLLOWER_TRANSLATION_CONSTANTS = new PidConstants(0.05, 0.01, 0.0);
@@ -430,7 +430,7 @@ public static ArrayList<HolonomicDriveSignal> readDriveRecording(String fileName
  
   @Override
   public void outputToSmartDashboard() {
-     // super.outputToSmartDashboard();
+      super.outputToSmartDashboard();
 
       // HolonomicDriveSignal localSignal;
       // Trajectory.Segment localSegment;

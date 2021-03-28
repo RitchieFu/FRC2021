@@ -208,13 +208,16 @@ private void initChooser() {
 //  m_chooser.addOption("Shoot, Collect Left", AutonomousSequences.ShootThenCollectLeft());
  m_chooser.addOption("Rotate 90 degrees", AutonomousSequences.RotateTest());
  m_chooser.addOption("Galactic-Search Red A", AutonomousSequences.GalacticSearchRedPathA());
+ m_chooser.addOption("Galactic-Search Red B", AutonomousSequences.GalacticSearchRedPathB());
 //  m_chooser.addOption("DriveTwoFeetTwice", AutonomousSequences.DriveTwoFeetTwice());
 m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightForwardAndBack());
  m_chooser.addOption("DriveLeftAndBack", AutonomousSequences.DriveLeftThenRight());
 //  m_chooser.addOption("IntakeTest", AutonomousSequences.IntakeTest());
  m_chooser.addOption("GoFetchTest", AutonomousSequences.GoFetchTest());
  m_chooser.addOption("Galactic-Search Blue A", AutonomousSequences.GalacticSearchBluePathA());
+ m_chooser.addOption("Galactic-Search Blue B", AutonomousSequences.GalacticSearchBluePathB());
  m_chooser.addOption("Galactic-Search Red A Rotate", AutonomousSequences.GalacticSearchRedPathARotate());
+ m_chooser.addOption("GalacticSearch command", AutonomousSequences.GalacticSearch());
  //m_chooser.addOption("Barrel path", AutonomousSequences.barrelRacing());
  m_chooser.addOption("Arc test", AutonomousSequences.PathArcTest());
  m_chooser.addOption("Barrel Racing 1", AutonomousSequences.barrelRacing());
@@ -236,7 +239,7 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
    */
   @Override
   public void robotPeriodic() {
-
+    //drivetrainSubsystem.outputToSmartDashboard();
   }
 
   /**
@@ -289,7 +292,16 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
     
     // switch (chosenPath) {
     //   case "PathRedA":
-    //     autonomousCommand = AutonomousSequences.GalacticSearchRedPathA();
+    //     //autonomousCommand = AutonomousSequences.GalacticSearchRedPathA();
+    //     break;
+    //   case "PathBlueA":
+    //     //autonomousCommand = AutonomousSequences.GalacticSearchBluePathA();
+    //     break;
+    //   case "PathRedB":
+    //     //autonomousCommand = AutonomousSequences.GalacticSearchRedPathB();
+    //     break;
+    //   case "PathBlueB":
+    //     //autonomousCommand = AutonomousSequences.GalacticSearchBluePathB();
     //     break;
     // }
     //autonomousCommand = AutonomousSequences.GalacticSearchBluePathA();

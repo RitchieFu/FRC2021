@@ -32,13 +32,14 @@ import frc.robot.models.VisionObject;
 public class ObjectTrackerSubsystem extends Subsystem {
 	NetworkTable monsterVision; 
     VisionObject[] foundObjects; 
+    private String jsonString;
 
 	// Put methods for controlling this subsystem
     // here. Call these from Commands.
 	public ObjectTrackerSubsystem(){
         NetworkTableInstance inst = NetworkTableInstance.getDefault(); 
         monsterVision = inst.getTable("MonsterVision");	
-        
+        jsonString = "";
         // monsterVision.addEntryListener(
         //     "ObjectTracker",
         //     (monsterVision, key, entry, value, flags) -> {
@@ -57,11 +58,15 @@ public class ObjectTrackerSubsystem extends Subsystem {
         if(entry==null) {
             return;
         }
-        String json = entry.getString("ObjectTracker");
-        foundObjects = gson.fromJson(json, VisionObject[].class);
+        jsonString = entry.getString("ObjectTracker");
+        foundObjects = gson.fromJson(jsonString, VisionObject[].class);
         
     }
     
+    public String getObjectsJson()
+    {
+        return jsonString;
+    }
     
     // private NetworkTableEntry getEntry(Integer index, String subkey) {
     //     try {
@@ -94,6 +99,21 @@ public class ObjectTrackerSubsystem extends Subsystem {
         return foundObjects.length; 
     }
     
+    public VisionObject[] getObjects(double minimumConfidence) {
+
+        if (foundObjects == null || foundObjects.length == 0)
+            return null;
+
+        List<VisionObject> filteredResult = Arrays.asList(foundObjects)
+            .stream()
+            .filter(vo -> vo.confidence >= minimumConfidence )
+            .collect(Collectors.toList());
+
+        VisionObject filteredArray[] = new VisionObject[filteredResult.size()];
+        return filteredResult.toArray(filteredArray);
+
+    }
+
     public VisionObject[] getObjectsOfType(String objectLabel) {
 
         if (foundObjects == null || foundObjects.length == 0)

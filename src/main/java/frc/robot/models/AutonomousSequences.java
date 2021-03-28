@@ -10,13 +10,16 @@ import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.AutonomousTrajectoryCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.FetchPowerCellCommand;
+import frc.robot.commands.GalacticSearchCommand;
 import frc.robot.commands.IntakeActuateCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDetectToElevatorIndexCommand;
@@ -288,10 +291,21 @@ public class AutonomousSequences {
                 return output;
         }
 
+
+        public static CommandGroup GalacticSearch(){
+                CommandGroup output = new CommandGroup();
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false, 2);
+                output.addSequential(lowerIntake);
+
+                GalacticSearchCommand searchCommand = new GalacticSearchCommand(20);
+                output.addSequential(searchCommand);
+                return output;
+        }
+        
         public static CommandGroup GalacticSearchRedPathA() {
                 CommandGroup output = new CommandGroup();
-                RobotRotateCommand rotateCommand = new RobotRotateCommand(20.8); // before 23.56, which is too far over
-                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-78.988); // before -85.12 when rotateCommand angle was 23.56
+                RobotRotateCommand rotateCommand = new RobotRotateCommand(26.8); // before 23.56, which is too far over
+                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-78.988-6); // before -85.12 when rotateCommand angle was 23.56
                 IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false, 1);
 
                 Path driveForward = new Path(Rotation2.ZERO);
@@ -329,7 +343,18 @@ public class AutonomousSequences {
                 Trajectory driveToA6Trajectory = new Trajectory(driveToA6, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
                 AutonomousTrajectoryCommand driveToA6Command = new AutonomousTrajectoryCommand(driveToA6Trajectory);
 
-                output.addParallel(lowerIntake);
+                Path driveToEnd = new Path(Rotation2.ZERO);
+                driveToEnd.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-50, 100)
+                        )
+                );
+                
+                Trajectory driveToEndTrajectory = new Trajectory(driveToEnd, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToEndCommand = new AutonomousTrajectoryCommand(driveToEndTrajectory);
+
+                output.addSequential(new TimedCommand(2));
                 output.addParallel(driveForwardCommand);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
                 output.addSequential(rotateCommand, 2);
@@ -338,6 +363,7 @@ public class AutonomousSequences {
                 output.addSequential(rotateCommand2, 2);
                 output.addParallel(driveToA6Command);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(8));
+                output.addSequential(driveToEndCommand);
 
                 return output; 
         }
@@ -346,7 +372,7 @@ public class AutonomousSequences {
                 CommandGroup output = new CommandGroup();
                 IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
                 RobotRotateCommand rotateCommand0 = new RobotRotateCommand(-71.56+14); 
-                RobotRotateCommand rotateCommand1 = new RobotRotateCommand(97.12-24); 
+                RobotRotateCommand rotateCommand1 = new RobotRotateCommand(97.12-14); 
                 
                 Path driveForward = new Path(Rotation2.ZERO);
                 driveForward.addSegment(
@@ -392,7 +418,7 @@ public class AutonomousSequences {
                 // Trajectory driveToEndzoneTrajectory = new Trajectory(driveToEndzone, Robot.drivetrainSubsystem.AUTONOMOUS_CONTRAINTS);
                 // AutonomousTrajectoryCommand driveToEndzoneCommand = new AutonomousTrajectoryCommand(driveToEndzoneTrajectory);
 
-                output.addParallel(lowerIntake);
+                
                 output.addParallel(driveForwardCommand);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(5)); //is 3 seconds enough?
                 output.addSequential(rotateCommand0);
@@ -401,6 +427,142 @@ public class AutonomousSequences {
                 output.addSequential(rotateCommand1);
                 output.addParallel(driveToC9Command);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
+                return output; 
+
+                // Why dont we make a function that takes the params for movement and such then returns the AutonomousTrajectoryCommand to make the code smaller, just an idea
+        }
+
+        public static CommandGroup GalacticSearchRedPathB() {
+
+                //https://firstfrc.blob.core.windows.net/frc2021/Manual/TeamUpdates/2021TeamUpdate02.pdf
+                CommandGroup output = new CommandGroup();
+                RobotRotateCommand rotateCommand = new RobotRotateCommand(45.0); // before 23.56, which is too far over
+                RobotRotateCommand rotateCommand2 = new RobotRotateCommand(-45.0); // before -85.12 when rotateCommand angle was 23.
+                IntakeActuateCommand raiseIntake = new IntakeActuateCommand(true, 1);
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false, 1);
+
+                Path driveForward = new Path(Rotation2.ZERO);
+                driveForward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-29.0, 0.0)
+                        )
+                );
+                
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+                Path driveArc = new Path(Rotation2.ZERO);
+                driveArc.addSegment(
+                        new PathArcSegment(
+                                new Vector2(0.0, 0.0), 
+                                new Vector2(-55, 200), 
+                                new Vector2(-55, 10)
+                        )
+                );
+                
+
+                Trajectory driveArcTrajectory = new Trajectory(driveArc, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveArcCommand = new AutonomousTrajectoryCommand(driveArcTrajectory);
+                
+                Path driveArc2 = new Path(Rotation2.ZERO);
+                driveArc2.addSegment(
+                        new PathArcSegment(
+                                new Vector2(0.0, 0.0), 
+                                new Vector2(-70.0, -65.0), 
+                                new Vector2(-70.0, 5)
+                        )
+                );
+                Trajectory driveArc2Trajectory = new Trajectory(driveArc2, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveArc2Command = new AutonomousTrajectoryCommand(driveArc2Trajectory);
+
+                Path driveToEnd = new Path(Rotation2.ZERO);
+                driveToEnd.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-130.0, 0.0)
+                        )
+                );
+                
+                Trajectory driveToEndTrajectory = new Trajectory(driveToEnd, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToEndCommand = new AutonomousTrajectoryCommand(driveToEndTrajectory);
+
+                
+
+                output.addSequential(new TimedCommand(2));
+                output.addParallel(driveForwardCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
+                output.addParallel(driveArcCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
+                output.addParallel(driveArc2Command);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(4));
+                output.addParallel(driveToEndCommand);
+                output.addSequential(raiseIntake);
+
+                return output; 
+        }
+
+        public static CommandGroup GalacticSearchBluePathB() {
+                CommandGroup output = new CommandGroup();
+                IntakeActuateCommand lowerIntake = new IntakeActuateCommand(false,1);
+                IntakeActuateCommand raiseIntake = new IntakeActuateCommand(true, 1);
+
+                
+                Path driveForward = new Path(Rotation2.ZERO);
+                driveForward.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-123.0, 0.0)
+                        )
+                );
+                Trajectory driveForwardTrajectory = new Trajectory(driveForward, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveForwardCommand = new AutonomousTrajectoryCommand(driveForwardTrajectory);
+
+                Path driveArc = new Path(Rotation2.ZERO);
+                driveArc.addSegment(
+                        new PathArcSegment(
+                                new Vector2(0.0, 0.0), 
+                                new Vector2(-70.0, -65.0), 
+                                new Vector2(-70.0, 5)
+                        )
+                );
+                
+
+                Trajectory driveArcTrajectory = new Trajectory(driveArc, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveArcCommand = new AutonomousTrajectoryCommand(driveArcTrajectory);
+                
+                Path driveArc2 = new Path(Rotation2.ZERO);
+                driveArc2.addSegment(
+                        new PathArcSegment(
+                                new Vector2(0.0, 0.0), 
+                                new Vector2(-55, 200), 
+                                new Vector2(-55, 20)
+                        )
+                );
+                
+                Trajectory driveArc2Trajectory = new Trajectory(driveArc2, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveArc2Command = new AutonomousTrajectoryCommand(driveArc2Trajectory);
+
+                Path driveToEnd = new Path(Rotation2.ZERO);
+                driveToEnd.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0.0,0.0), 
+                                new Vector2(-30.0, 0.0)
+                        )
+                );
+                
+                Trajectory driveToEndTrajectory = new Trajectory(driveToEnd, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand driveToEndCommand = new AutonomousTrajectoryCommand(driveToEndTrajectory);
+
+                
+                output.addParallel(driveForwardCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(5)); //is 3 seconds enough?
+                output.addParallel(driveArcCommand);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
+                output.addParallel(driveArc2Command);
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
+                output.addParallel(driveToEndCommand);
+                output.addSequential(raiseIntake);
                 return output; 
 
                 // Why dont we make a function that takes the params for movement and such then returns the AutonomousTrajectoryCommand to make the code smaller, just an idea
@@ -462,6 +624,7 @@ public class AutonomousSequences {
                 return output; 
         }
 
+        
         public CommandGroup buildDriveAndCollect(Vector2 startPose, Vector2 endPose)
         {
                 CommandGroup driveAndCollect = new CommandGroup();
