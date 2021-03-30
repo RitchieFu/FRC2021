@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -30,6 +33,11 @@ public class ShooterSubsystem extends Subsystem {
   TalonFX motor2;
   CANSparkMax topKickerMotor;
   DoubleSolenoid shootorSolenoid;
+
+//public string[] ZoneNames
+public static HashMap<Integer, double[]> shooterZoneValue;
+public static int currentZone;
+
   // DoubleSolenoid rightSolenoid;
   public ShooterSubsystem(){
     motor1 = new TalonFX(RobotMap.SHOOTER_TOP_CAN);
@@ -45,8 +53,41 @@ public class ShooterSubsystem extends Subsystem {
     //shootorSolenoid = new DoubleSolenoid(3,2);
     //shootorSolenoid = new DoubleSolenoid(1,2);
     //shootorSolenoid = new DoubleSolenoid(0,1);
-
+    shooterZoneValue = new HashMap<Integer, double[]>();
+    shooterZoneValue.put(0, new double[] {500, 500}); //changed from 0,0 to low values 
+    shooterZoneValue.put(1, new double[] {1750, 1300});
+    shooterZoneValue.put(2, new double[] {2200, 1600});
+    shooterZoneValue.put(3, new double[] {2200, 1700});
+    currentZone = 0;
     configureMotors();  
+    SmartDashboard.putString("Zone", "Green zone");
+  }
+
+  public double[] getZoneValues() {
+    return shooterZoneValue.get(currentZone);
+  }
+
+  public void indexZone() {
+    switch(currentZone) {
+
+      case 0:
+        SmartDashboard.putString("Zone", "Yellow zone");
+        currentZone++;
+        break;
+      case 1:
+        SmartDashboard.putString("Zone", "Blue zone");
+        currentZone++;
+        break;
+      case 2:
+        SmartDashboard.putString("Zone", "Red zone");
+        currentZone++;
+        break;
+      case 3:
+        SmartDashboard.putString("Zone", "Green zone");
+        currentZone=0;
+        break;
+    }
+    SmartDashboard.putNumber("zone number", currentZone);
   }
 
   public void aimHigh(){
@@ -161,6 +202,7 @@ public class ShooterSubsystem extends Subsystem {
   //    seq.addStep(new SpinColorWheel());
   }
 
+  
 
   @Override
   public void initDefaultCommand() {

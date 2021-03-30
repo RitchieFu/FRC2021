@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
 
 
   SendableChooser<CommandGroup> m_chooser;
+  
 
   private SubsystemManager subsystemManager;
 
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
   ShooterCommand shooterWithVisionCommand;
   ShooterCommand shooterNoVisionCommand;
   
+  IndexZoneCommand indexZoneCommand;
 
   IntakeCommand  intakeInCommand;
   IntakeCommand intakeOutCommand;
@@ -167,6 +169,7 @@ private void initCommands() {
     shooterToggleCommand = new ShooterToggleCommand();
 
     snapshotCommand = new SnapshotCommand();
+    indexZoneCommand = new IndexZoneCommand();
  }
 
 private void initButtons() {
@@ -193,14 +196,16 @@ private void initButtons() {
     oi.referenceResetButton.whenPressed(zeroCommand);
     oi.shooterNoVisionButton.whileHeld(shooterNoVisionCommand);
     oi.shooterVisionButton.whileHeld(shooterWithVisionCommand);
+    oi.indexZoneButton.whenPressed(indexZoneCommand);
     //oi.snapShotButton.whenPressed(snapshotCommand);
 
 }
 
 private void initChooser() {
   
- m_chooser = new SendableChooser<>();
-//  m_chooser.addOption("Shoot, Collect Right", AutonomousSequences.ShootThenCollectRight());
+  m_chooser = new SendableChooser<>();
+
+//  m_chooser.addOption("Shoot, Collect Right",s AutonomousSequences.ShootThenCollectRight());
 //  m_chooser.addOption("Shoot, Collect Right, Shoot Again ", AutonomousSequences.ShootThenCollectRight_ThenShootAgain());
 //  m_chooser.addOption("Leave Initiation Line", AutonomousSequences.backAwayFromInitiationLine());
 //  m_chooser.addOption("Shoot from Right, Collect Right, Shoot Again", AutonomousSequences.ShootFromRight_Of_Optimal_Then_Collect());
@@ -342,7 +347,7 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
       autonomousCommand.cancel();
     }
     // if(autoHappened){
-       reverseZeroCommand.start();
+    //   reverseZeroCommand.start();
     // }
     Robot.drivetrainSubsystem.getFollower().cancel();
 
@@ -350,7 +355,7 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
     
 
     subsystemManager.enableKinematicLoop(UPDATE_DT);
-   // zeroCommand.start();
+    zeroCommand.start();
    // SmartDashboard.putString("Path", PathSelecter.choosePath());
   }
 

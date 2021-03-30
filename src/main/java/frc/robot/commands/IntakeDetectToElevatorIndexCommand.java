@@ -15,7 +15,7 @@ public class IntakeDetectToElevatorIndexCommand extends CommandGroup {
    */
   public IntakeDetectToElevatorIndexCommand() {
     IntakeDetectCommand intakeDetectCommand = new IntakeDetectCommand();
-    ElevatorIndexCommand elevatorIndexCommand = new ElevatorIndexCommand(true, 35);
+    ElevatorIndexCommand elevatorIndexCommand = new ElevatorIndexCommand(true, 15);
 
     addSequential(intakeDetectCommand);
     addSequential(elevatorIndexCommand);

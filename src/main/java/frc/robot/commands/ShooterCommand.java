@@ -44,8 +44,8 @@ public class ShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {    
-    // SmartDashboard.putNumber("motor1Speed", m_upperMotorSpeed);
-    // SmartDashboard.putNumber("motor2Speed", m_lowerMotorSpeed);
+    SmartDashboard.putNumber("motor1Speed", m_upperMotorSpeed);
+    SmartDashboard.putNumber("motor2Speed", m_lowerMotorSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -70,7 +70,7 @@ public class ShooterCommand extends Command {
         //For now, Only use throttle adjustments in high position.
         //If we want to use in low position we need to take measurements and calibrate.
         
-        executeWithSmartDashboard();
+        executeWithZones();
         //executeWithThrottles(motor1Speed);
 
     }
@@ -89,9 +89,19 @@ public class ShooterCommand extends Command {
     Robot.shooterSubsystem.SpinShooter(m_upperMotorSpeed, m_lowerMotorSpeed);
   }
 
+  private void executeWithZones() {
+    double[] shooterValues = Robot.shooterSubsystem.getZoneValues();
+
+    SmartDashboard.putNumber("motor1Speed", shooterValues[0]);
+    SmartDashboard.putNumber("motor2Speed", shooterValues[1]);
+
+    Robot.shooterSubsystem.SpinShooter(shooterValues[0], shooterValues[1]);
+  }
+
   private void executeWithThrottles(double motor1Speed)
   {
     double motor1Adjust = Robot.oi.rightStick.getRawAxis(2);
+    double motor2Adjust = Robot.oi.leftStick.getRawAxis(2);
     //Make no changes to motor speed unless the user has moved the throttle. 
  
         //Turn motor1Adjust into a range between 0 - 2.
@@ -103,9 +113,9 @@ public class ShooterCommand extends Command {
         SmartDashboard.putNumber("motor1Adjust", motor1Adjust);
         motor1Speed = 2500 - (200 * motor1Adjust);
         //motor1Speed = 1300 - (315 * motor1Adjust); //Low Port RPM
-        SmartDashboard.putNumber("motor1Speed", motor1Speed);
+        SmartDashboard.putNumber("motor2Speed", motor1Speed);
         //motor1Speed now ranges between 1700 - 1900, depending on the throttle. 
-        Robot.shooterSubsystem.SpinShooter(motor1Speed);
+        //Robot.shooterSubsystem.SpinShooter(motor1Speed, motor2Speed);
 
   }
 
