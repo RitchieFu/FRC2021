@@ -347,7 +347,7 @@ public class AutonomousSequences {
                 driveToEnd.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(-50, 100)
+                                new Vector2(-60, 140)
                         )
                 );
                 
@@ -536,7 +536,13 @@ public class AutonomousSequences {
                         new PathArcSegment(
                                 new Vector2(0.0, 0.0), 
                                 new Vector2(-55, 200), 
-                                new Vector2(-55, 20)
+                                new Vector2(-55, 10)
+                        )
+                );
+                driveArc2.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-55,200),
+                                new Vector2(-65,200)
                         )
                 );
                 
@@ -547,7 +553,7 @@ public class AutonomousSequences {
                 driveToEnd.addSegment(
                         new PathLineSegment(
                                 new Vector2(0.0,0.0), 
-                                new Vector2(-30.0, 0.0)
+                                new Vector2(-35.0, 0.0)
                         )
                 );
                 
@@ -560,7 +566,7 @@ public class AutonomousSequences {
                 output.addParallel(driveArcCommand);
                 output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
                 output.addParallel(driveArc2Command);
-                output.addSequential(new IntakeDetectToElevatorIndexCommand(5));
+                output.addSequential(new IntakeDetectToElevatorIndexCommand(6));
                 output.addParallel(driveToEndCommand);
                 output.addSequential(raiseIntake);
                 return output; 
@@ -1064,6 +1070,8 @@ public class AutonomousSequences {
                                 new Vector2(-276, 40) // center point
                         )
                 );
+
+                // Path barrelPath2 = new Path(Rotatioon.)
                 barrelPath.addSegment( 
                         new PathLineSegment(
                                 new Vector2(-300.92, 10),
@@ -1287,39 +1295,59 @@ public class AutonomousSequences {
                         )
                 ); 
 
-                slalomPath.addSegment(
+                Path fastDriveBackPath = new Path(Rotation2.ZERO);
+                fastDriveBackPath.addSegment(
                         new PathLineSegment(
-                                new Vector2(-235, 5),
-                                new Vector2(-42, 5)
+                                new Vector2(0,0),
+                                new Vector2(193,0)
                         )
-                ); 
+                );
 
-                slalomPath.addSegment(
+                // slalomPath.addSegment(
+                //         new PathLineSegment(
+                //                 new Vector2(-235, 5),
+                //                 new Vector2(-42, 5)
+                //         )
+                // ); 
+
+                Path slalomPath2 = new Path(Rotation2.ZERO);
+
+                slalomPath2.addSegment(
                         new PathLineSegment(
-                                new Vector2(-42, 5),
-                                new Vector2(-42, -60)
+                                new Vector2(0, 0),
+                                new Vector2(0, -65)
                         )
                 ); 
                 
-                slalomPath.addSegment(
+                slalomPath2.addSegment(
                         new PathLineSegment(
-                                new Vector2(-42, -60),
-                                new Vector2(0, -60)
+                                new Vector2(0, -65),
+                                new Vector2(42, -65)
                         )
                 ); 
 
-                slalomPath.addSegment(
+                slalomPath2.addSegment(
                         new PathLineSegment(
-                                new Vector2(0, -60),
-                                new Vector2(5, -60)
+                                new Vector2(42, -65),
+                                new Vector2(30, -65)
                         )
                 ); 
 
 
                 
+                Trajectory fastDriveBackTrajectory = new Trajectory(fastDriveBackPath, Robot.drivetrainSubsystem.AUTONOMOUS_CONSTRAINTS);
+                AutonomousTrajectoryCommand fastDriveBackCommand = new AutonomousTrajectoryCommand(fastDriveBackTrajectory);
+
+                Trajectory slalomPath2Trajectory = new Trajectory(slalomPath2, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand slalomPath2Command = new AutonomousTrajectoryCommand(slalomPath2Trajectory);
+
                 Trajectory slalomTrajectory = new Trajectory(slalomPath, Robot.drivetrainSubsystem.CONSTRAINTS);
                 AutonomousTrajectoryCommand slalomCommand = new AutonomousTrajectoryCommand(slalomTrajectory);
                 output.addSequential(slalomCommand); 
+                output.addSequential(fastDriveBackCommand); 
+                output.addSequential(slalomPath2Command); 
+
+
 
                 return output;
         }
@@ -1516,12 +1544,12 @@ public class AutonomousSequences {
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
                                         new Vector2(-44, -30), // start point
-                                        new Vector2(-54, -60) // end point
+                                        new Vector2(-54, -50) // end point
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-54, -60), // start point
+                                        new Vector2(-54, -50), // start point
                                         new Vector2(-54, 0) // end point   
                                 )
                         );
@@ -1534,55 +1562,55 @@ public class AutonomousSequences {
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
                                         new Vector2(-84, 0), // start point
-                                        new Vector2(-84, 70) // end point   
+                                        new Vector2(-84, 62) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-84, 70), // start point
-                                        new Vector2(-144, 70) // end point   
+                                        new Vector2(-84, 62), // start point
+                                        new Vector2(-148, 62) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-144, 70), // start point
-                                        new Vector2(-144, -60) // end point   
+                                        new Vector2(-148, 62), // start point
+                                        new Vector2(-148, -55) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-144, -60), // start point
-                                        new Vector2(-144, 70) // end point   
+                                        new Vector2(-148, -55), // start point
+                                        new Vector2(-148, 65) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-144, 70), // start point
-                                        new Vector2(-234, 70) // end point   
+                                        new Vector2(-148, 65), // start point
+                                        new Vector2(-246, 65) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-234, 70), // start point
-                                        new Vector2(-234, -60) // end point   
+                                        new Vector2(-246, 65), // start point
+                                        new Vector2(-246, -50) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-234, -60), // start point
-                                        new Vector2(-234, 20) // end point   
+                                        new Vector2(-246, -50), // start point
+                                        new Vector2(-246, 0) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-234, 20), // start point
-                                        new Vector2(-270, 20) // end point   
+                                        new Vector2(-246, 0), // start point
+                                        new Vector2(-270, 0) // end point   
                                 )
                         );
                         barrelPath.addSegment( // loop around D5
                                 new PathLineSegment(
-                                        new Vector2(-270, 20), // start point
-                                        new Vector2(-260, 20) // end point   
+                                        new Vector2(-270, 0), // start point
+                                        new Vector2(-260, 0) // end point   
                                 )
                         );
 

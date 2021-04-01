@@ -30,6 +30,7 @@ public class ShooterCommand extends Command {
   public ShooterCommand(boolean useCamera) {
     this.useCamera = useCamera;
     m_upperMotorSpeed = RobotMap.SHOOTER_MOTOR_HIGH_DEFAULT_SPEED;
+    m_lowerMotorSpeed = m_upperMotorSpeed * .75;
     // Use addRequirements() here to declare subsystem dependencies.
     //addRequirements(subsystem);
   }
@@ -39,13 +40,13 @@ public class ShooterCommand extends Command {
     super(timeout);
     this.useCamera = useCamera;
     m_upperMotorSpeed = upperMotorSpeed;
+    m_lowerMotorSpeed = m_upperMotorSpeed * .75;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {    
-    SmartDashboard.putNumber("motor1Speed", m_upperMotorSpeed);
-    SmartDashboard.putNumber("motor2Speed", m_lowerMotorSpeed);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,27 +54,30 @@ public class ShooterCommand extends Command {
   public void execute() {
     
     double motor1Speed = m_upperMotorSpeed;
+    double motor2Speed = m_lowerMotorSpeed;
 
-    if (useCamera) {
 
-      Robot.vision.data();
-      boolean visionTargetFound = Robot.vision.targetExists();
-      SmartDashboard.putBoolean("TargetFound", visionTargetFound);
-      if (visionTargetFound) {
+    // if (useCamera) {
 
-          targetDistance = Robot.vision.getXDistance();
-          motor1Speed = computeShooterSpeedFromTargetDistance(targetDistance, shootHigh);
-          Robot.shooterSubsystem.SpinShooter(motor1Speed);
-      } 
-    } else {
+    //   Robot.vision.data();
+    //   boolean visionTargetFound = Robot.vision.targetExists();
+    //   SmartDashboard.putBoolean("TargetFound", visionTargetFound);
+    //   if (visionTargetFound) {
+
+    //       targetDistance = Robot.vision.getXDistance();
+    //       motor1Speed = computeShooterSpeedFromTargetDistance(targetDistance, shootHigh);
+    //       Robot.shooterSubsystem.SpinShooter(motor1Speed);
+    //   } 
+    // } else {
 
         //For now, Only use throttle adjustments in high position.
         //If we want to use in low position we need to take measurements and calibrate.
         
-        executeWithZones();
-        //executeWithThrottles(motor1Speed);
+      executeWithZones();
+    // executeWithSmartDashboard();
+        //executeWithThrottles(motor1Speed, motor2Speed);
 
-    }
+    // }
 
     // yellow zone: upper motor - 1750, lower motor - 1300 (raised shooter)
     // blue zone: upper motor - 2200, lower motor - 1600 (lowered shooter)
@@ -83,10 +87,15 @@ public class ShooterCommand extends Command {
   }
 
   private void executeWithSmartDashboard() {
-    m_upperMotorSpeed = SmartDashboard.getNumber("motor1Speed", m_upperMotorSpeed);
-    m_lowerMotorSpeed = SmartDashboard.getNumber("motor2Speed", m_lowerMotorSpeed);
+    // System.out.println("executeWithSmartDashboard");
+    double upper = SmartDashboard.getNumber("motor1Speed", 0);
+    double lower = SmartDashboard.getNumber("motor2Speed", 0);
     
-    Robot.shooterSubsystem.SpinShooter(m_upperMotorSpeed, m_lowerMotorSpeed);
+    Robot.shooterSubsystem.SpinShooter(upper, lower);
+    // System.out.println(upper);
+
+    // SmartDashboard.putNumber("motor1Speed", upper);
+    // SmartDashboard.putNumber("motor2Speed", lower);
   }
 
   private void executeWithZones() {
@@ -98,7 +107,7 @@ public class ShooterCommand extends Command {
     Robot.shooterSubsystem.SpinShooter(shooterValues[0], shooterValues[1]);
   }
 
-  private void executeWithThrottles(double motor1Speed)
+  private void executeWithThrottles(double motor1Speed, double motor2Speed)
   {
     double motor1Adjust = Robot.oi.rightStick.getRawAxis(2);
     double motor2Adjust = Robot.oi.leftStick.getRawAxis(2);
@@ -110,10 +119,19 @@ public class ShooterCommand extends Command {
         } else {
           motor1Adjust = 1 - Math.abs(motor1Adjust);
         }
-        SmartDashboard.putNumber("motor1Adjust", motor1Adjust);
+
+        if (motor2Adjust >= 0) {
+          motor2Adjust = 1 + motor2Adjust;
+        } else {
+          motor2Adjust = 1 - Math.abs(motor2Adjust);
+        }
+        //SmartDashboard.putNumber("motor1Adjust", motor1Adjust);
         motor1Speed = 2500 - (200 * motor1Adjust);
+        motor2Speed = 2500 - (200 * motor2Adjust);
+
         //motor1Speed = 1300 - (315 * motor1Adjust); //Low Port RPM
-        SmartDashboard.putNumber("motor2Speed", motor1Speed);
+        SmartDashboard.putNumber("motor1Speed", motor1Speed);
+        SmartDashboard.putNumber("motor2Speed", motor2Speed);
         //motor1Speed now ranges between 1700 - 1900, depending on the throttle. 
         //Robot.shooterSubsystem.SpinShooter(motor1Speed, motor2Speed);
 
