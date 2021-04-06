@@ -1374,6 +1374,120 @@ public class AutonomousSequences {
 
                 return output;
         }
+
+        //This is the slalom code which worked.
+        //We have a video of this for submission.
+        //In slalom2, we made changes, didn't test, switched to another activity,
+        public static CommandGroup slalom3() {
+
+                CommandGroup output = new CommandGroup();
+                Path slalomPath = new Path(Rotation2.ZERO);
+
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0,0),
+                                new Vector2(-24, 0)
+                        )
+                ); // drive forward
+
+                slalomPath.addSegment( // arc around D2
+                        new PathArcSegment(
+                                new Vector2(-24, 0),
+                                new Vector2(-52, -28), 
+                                new Vector2(-24, -28) 
+                        )
+                );
+
+                slalomPath.addSegment( // arc around D4
+                        new PathArcSegment(
+                                new Vector2(-52, -28),
+                                new Vector2(-63.581, -60), 
+                                new Vector2(-102, -28) 
+                        )
+                );
+
+                slalomPath.addSegment( // drive to D8 tangent
+                        new PathLineSegment(
+                                new Vector2(-63.581, -60),
+                                new Vector2(-234, -60)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-234, -60),
+                                new Vector2(-234, 0)
+                        )
+                ); 
+
+                slalomPath.addSegment( // drive to end of field arc
+                        new PathLineSegment(
+                                new Vector2(-234, 0),
+                                new Vector2(-252, 0)
+                        )
+                ); 
+
+                slalomPath.addSegment( // arc around D4
+                        new PathArcSegment(
+                                new Vector2(-252, 0),
+                                new Vector2(-300, -48), 
+                                new Vector2(-270, -30) 
+                        )
+                );
+
+                slalomPath.addSegment( // arc around D4
+                        new PathArcSegment(
+                                new Vector2(-300, -48),
+                                new Vector2(-235, -28), 
+                                new Vector2(-270, -30) 
+                        )
+                );
+
+                slalomPath.addSegment( // end of arc and drives straight
+                        new PathLineSegment(
+                                new Vector2(-235, -28),
+                                new Vector2(-235, 5)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-235, 5),
+                                new Vector2(-42, 5)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-42, 5),
+                                new Vector2(-42, -60)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(-42, -60),
+                                new Vector2(0, -60)
+                        )
+                ); 
+
+                slalomPath.addSegment(
+                        new PathLineSegment(
+                                new Vector2(0, -60),
+                                new Vector2(5, -60)
+                        )
+                ); 
+
+
+
+                Trajectory slalomTrajectory = new Trajectory(slalomPath, Robot.drivetrainSubsystem.CONSTRAINTS);
+                AutonomousTrajectoryCommand slalomCommand = new AutonomousTrajectoryCommand(slalomTrajectory);
+                output.addSequential(slalomCommand); 
+
+                return output;
+        }
+
         public static CommandGroup bounce() {
                 CommandGroup output = new CommandGroup();
                 Path barrelPath = new Path(Rotation2.ZERO);
