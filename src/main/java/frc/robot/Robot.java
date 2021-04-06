@@ -224,7 +224,7 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
  m_chooser.addOption("Galactic-Search Blue A", AutonomousSequences.GalacticSearchBluePathA());
  m_chooser.addOption("Galactic-Search Blue B", AutonomousSequences.GalacticSearchBluePathB());
  m_chooser.addOption("Galactic-Search Red A Rotate", AutonomousSequences.GalacticSearchRedPathARotate());
- m_chooser.addOption("GalacticSearch command", AutonomousSequences.GalacticSearch());
+ //m_chooser.addOption("GalacticSearch command", AutonomousSequences.GalacticSearch());
  //m_chooser.addOption("Barrel path", AutonomousSequences.barrelRacing());
  m_chooser.addOption("Arc test", AutonomousSequences.PathArcTest());
  m_chooser.addOption("Barrel Racing 1", AutonomousSequences.barrelRacing());
@@ -349,7 +349,7 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
       autonomousCommand.cancel();
     }
     // if(autoHappened){
-    //   reverseZeroCommand.start();
+       reverseZeroCommand.start(); // *** uncomment for reversing bot so shooter is "front"
     // }
     Robot.drivetrainSubsystem.getFollower().cancel();
 
@@ -357,7 +357,7 @@ m_chooser.addOption("DriveStraightAndBack", AutonomousSequences.DriveStraightFor
     
 
     subsystemManager.enableKinematicLoop(UPDATE_DT);
-    zeroCommand.start();
+    // zeroCommand.start(); // *** comment out for reversing so shooter is "front"
    // SmartDashboard.putString("Path", PathSelecter.choosePath());
   }
 

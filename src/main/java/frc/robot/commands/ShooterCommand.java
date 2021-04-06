@@ -73,8 +73,8 @@ public class ShooterCommand extends Command {
         //For now, Only use throttle adjustments in high position.
         //If we want to use in low position we need to take measurements and calibrate.
         
-      executeWithZones();
-    // executeWithSmartDashboard();
+       executeWithZones();
+   // executeWithSmartDashboard();
         //executeWithThrottles(motor1Speed, motor2Speed);
 
     // }

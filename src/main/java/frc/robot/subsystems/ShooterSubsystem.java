@@ -55,9 +55,9 @@ public static int currentZone;
     //shootorSolenoid = new DoubleSolenoid(0,1);
     shooterZoneValue = new HashMap<Integer, double[]>();
     shooterZoneValue.put(0, new double[] {3050, 600}); //changed from 0,0 to low values 
-    shooterZoneValue.put(1, new double[] {1650, 1300});
-    shooterZoneValue.put(2, new double[] {2200, 1600});
-    shooterZoneValue.put(3, new double[] {2200, 1700});
+    shooterZoneValue.put(1, new double[] {1700, 1400});
+    shooterZoneValue.put(2, new double[] {2100, 1600});
+    shooterZoneValue.put(3, new double[] {2175, 1700});
     currentZone = 0;
     configureMotors();  
     SmartDashboard.putString("Zone", "Green zone");

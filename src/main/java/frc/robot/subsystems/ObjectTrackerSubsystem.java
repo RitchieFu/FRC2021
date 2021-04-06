@@ -121,7 +121,7 @@ public class ObjectTrackerSubsystem extends Subsystem {
 
         List<VisionObject> filteredResult = Arrays.asList(foundObjects)
             .stream()
-            .filter(vo -> vo.objectLabel.equals(objectLabel))
+            .filter(vo -> vo.objectLabel.equals(objectLabel) && vo.confidence > 25)
             .collect(Collectors.toList());
 
         VisionObject filteredArray[] = new VisionObject[filteredResult.size()];

@@ -23,7 +23,7 @@ public class RobotRotateCommand extends Command {
   public RobotRotateCommand(double angle) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    super(2);
+    super(1);
     angleController = new PIDController(0.005, 0.001, 0.0);
     angleController.enableContinuousInput(-180, 180);
     this.targetAngle = angle;
